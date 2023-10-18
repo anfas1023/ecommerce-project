@@ -29,14 +29,14 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
-// const nocache = (req,res,next)=> {
-//     console.log('cache');
-//     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-//     next();
+const nocache = (req,res,next)=> {
+    console.log('cache');
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    next();
 
-// }
+}
 
-// app.use(nocache)
+app.use(nocache)
 
 
 

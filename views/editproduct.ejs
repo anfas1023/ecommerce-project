@@ -81,7 +81,7 @@
 
 
 
-        <form action="/editproduct/<%= product._id %>" method="POST" enctype="multipart/form-data">
+        <form action="/editproduct/<%= product._id %>" id="edit-product" class="btn btn-primary" product-id="<%= product._id %>" product-name="<%=  product.productname  %>" product-price="<%= product.productprice %>" product-description="<%= product.productdescription %>" product-stocks="<%= product.productstocks %>" product-catagory="<%= product.productcatagory %>" product-image="<%= product.productimage %>" method="POST" enctype="multipart/form-data" >
 
 
                 <label for="username">Productname</label>
@@ -102,9 +102,29 @@
 
 
             <label for="image">Productimage</label>
-            <input type="file" id="image" name="filename"  required>
-            <button type="submit">Sign Up</button>
+            <input type="file" id="image" name="filename" required>
+            <img src="/uploads/<%= product.productimage %>" alt="image is here" height="100px" width="80px">
+            <button type="submit">edit product</button>
         </form>
     </div>
+    <script>
+        const edit=document.querySelector("#edit-product")
+        const username=edit.getAttribute("product-name")
+        const price=edit.getAttribute("product-price")
+        const description=edit.getAttribute("product-description")
+        const stocks=edit.getAttribute("product-stocks");
+        const catagory=edit.getAttribute("product-catagory");
+        
+
+
+        document.getElementById("username").value=username
+        document.getElementById("number").value=price
+        document.getElementById("description").value=description
+        document.getElementById("stocks").value=stocks
+        document.getElementById("catagory").value=catagory
+       
+        
+
+    </script>
 </body>
 </html>
