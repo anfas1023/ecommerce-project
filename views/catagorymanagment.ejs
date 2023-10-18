@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Navbar</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link" href="/addcategory" data-toggle="modal" data-target="#addUserModal">Addcatagory</a>
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <% if (allcatagory) { %>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+
+          <th scope="col">catagoryname</th>
+          <th scope="col">catagorydescription</th>
+               </tr>
+      </thead>
+  <% } %>
+    <tbody>
+      <% allcatagory.forEach(catagory => { %>
+        <tr>
+
+          <td id="cataname"><%= catagory.catagoryname %></td>
+          <td><%= catagory.catagorydescription %></td>
+          <td>
+            <a class="btn btn-primary edit-catagory "   data-toggle="modal" data-target="#myModal" href="/editcatagory" data-id="<%= catagory._id %>" data-catagoryname="<%= catagory.catagoryname %>" data-catagorydescription="<%= catagory.catagorydescription %>">Editcatagory</a>
+        </td>
+
+        </tr>
+
+
+      <% }) %>
+
+    </tbody>
+  </table>
+<!-- 
+  Add User Modal -->
+   <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+           <!-- Add user form goes here  -->
+          <form action="/addcatagory/" method="post">
+            <div class="form-group">
+              <label for="username">CategoryName</label>
+              <input type="text" class="form-control" id="username" placeholder="Enter username" name="catagoryname">
+            </div>
+            <div class="form-group">
+              <label for="text">Catagorydescription</label>
+              <input type="text" class="form-control" id="email" placeholder="Enter email" name="catagorydescription">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save catagory</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Button to trigger the modal -->
+  <!-- Button trigger modal -->
+
+
+
+
+
+
+
+<!-- edit catagory -->
+
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- edit Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Form in Modal</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- edit body -->
+      <div class="modal-body">
+        <form method="post" id="catagoryForm">
+          <div class="form-group">
+            <label for="name">Catagoryname</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter your name" name="catagoryname">
+          </div>
+          <div class="form-group">
+            <label for="email">CatagoryDescription</label>
+            <input type="text" class="form-control" id="description" placeholder="Enter your email" name="catagorydescription">
+            <input type="text" id="myInput" style="display: none;">
+
+          </div>
+          <button type="submit"  id="submit" class="btn btn-primary" data-dismiss="modal" >Submit</button>
+        </form>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button"   class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+  const edit = document.querySelectorAll(" .edit-catagory");
+  edit.forEach((button) => {
+    button.addEventListener("click", () => {
+      const name = document.getElementById("name");
+      const description = document.getElementById("description");
+      const formAction = document.getElementById("catagoryForm");
+      const myInput = document.getElementById("myInput");
+
+
+      const nameValue = button.getAttribute("data-catagoryname");
+      const descriptionValue = button.getAttribute("data-catagorydescription");
+      const catagoryid = button.getAttribute("data-id");
+      
+      console.log("here")
+
+      name.value = nameValue;
+      description.value = descriptionValue;
+      myInput.value = catagoryid
+    });
+  });
+
+  const submit = document.getElementById("submit");
+
+  submit.addEventListener("click", async (event) => {
+    event.preventDefault();
+    const description = document.getElementById("description");
+    const formAction = document.getElementById("catagoryForm");
+    const name= document.getElementById("name");
+    const myInput = document.getElementById("myInput");
+
+
+    const editdata = {
+      catagoryid:myInput.value,
+      catagoryname: name.value,
+      catagorydescription: description.value,
+    };
+
+    // formAction.action = `/editcatagory/${catagoryid}`;
+
+    // const edit = document.querySelector(".edit-catagory");
+    // const catagoryid = edit.getAttribute("data-id");
+
+     const res = await  fetch(`/editcatagory/${myInput.value}`, {
+      method: "POST",
+      body: JSON.stringify(editdata),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    if(res.ok){
+      window.location.reload();
+    }
+    else{
+      alert("some thing happend in your code bitch ");
+
+    }
+    
+  });
+
+
+  
+</script>
+
+</body>
+</html>

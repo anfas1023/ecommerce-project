@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Signup</title>
+    <style>
+        /* Reset default styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* Container for the signup form */
+        .container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* Form styling */
+        h2 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Add Product</h2>
+        <form action="/addproduct" method="POST" enctype="multipart/form-data">
+            <label for="username">Productname</label>
+            <input type="text" id="username" name="productname" required>
+
+            <label for="email">productprice</label>
+            <input type="number" id="email" name="productprice" required>
+
+            <label for="password">productdescription</label>
+            <input type="password" id="description" name="productdescription" required>
+
+            <label for="phone">productstocks</label>
+            <input type="tel" id="stocks" name="productstocks" required>
+
+            <label for="phone">productcatagory</label>
+            <input type="tel" id="catagory" name="productcatagory" required>
+
+            <label for="file">Productimage</label>
+            <input type="file" id="image" name="filename"  required>
+
+
+
+
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>
