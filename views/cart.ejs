@@ -3,39 +3,656 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Cart</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+      form {
+  width: 300px;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.value-button {
+  display: inline-block;
+  border: 1px solid #ddd;
+  margin: 0px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0px 0;
+  background: #eee;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.value-button:hover {
+  cursor: pointer;
+}
+
+form #decrease {
+  margin-right: -4px;
+  border-radius: 8px 0 0 8px;
+}
+
+form #increase {
+  margin-left: -4px;
+  border-radius: 0 8px 8px 0;
+}
+
+form #input-wrap {
+  margin: 0px;
+  padding: 0px;
+}
+
+input#number {
+  text-align: center;
+  border: none;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin: 0px;
+  width: 40px;
+  height: 40px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+      
+    </style>
 </head>
 <body>
-<div>
-    <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% cartdata.forEach(cart => { %>
-            <tr>
+  <header>
+    <!-- Jumbotron -->
+    <div class="p-3 text-center bg-white border-bottom">
+      <div class="container">
+        <div class="row gy-3">
+          <!-- Left elements -->
+          <div class="col-lg-2 col-sm-4 col-4">
+            <a href="https://mdbootstrap.com/" target="_blank" class="float-start">
+              <img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="35" />
+            </a>
+          </div>
+          <!-- Left elements -->
 
-              <td><img src="/uploads/<%= cart.cartimage %>" alt=""></td>
-              <td><%= cart.name %></td>
-              <td><%= cart.price %></td>
+          <!-- Center elements -->
+          <div class="order-lg-last col-lg-5 col-sm-8 col-8">
+            <div class="d-flex float-end">
+              <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank">
+                <i class="fas fa-user-alt m-1 me-md-2"></i>
+                <p class="d-none d-md-block mb-0">Sign in</p>
+              </a>
+              <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank">
+                <i class="fas fa-heart m-1 me-md-2"></i>
+                <p class="d-none d-md-block mb-0">Wishlist</p>
+              </a>
+              <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank">
+                <i class="fas fa-shopping-cart m-1 me-md-2"></i>
+                <p class="d-none d-md-block mb-0">My cart</p>
+              </a>
+            </div>
+          </div>
+          <!-- Center elements -->
 
-            </tr>
+          <!-- Right elements -->
+          <div class="col-lg-5 col-md-12 col-12">
+            <div class="input-group float-center">
+              <div class="form-outline">
+                <input type="search" id="form1" class="form-control" />
+                <label class="form-label" for="form1">Search</label>
+              </div>
+              <button type="button" class="btn btn-primary shadow-0">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+          <!-- Right elements -->
+        </div>
+      </div>
+    </div>
+    <!-- Jumbotron -->
+
+    <!-- Heading -->
+    <div class="bg-primary">
+      <div class="container py-4">
+        <!-- Breadcrumb -->
+        <nav class="d-flex">
+          <h6 class="mb-0">
+            <a href="" class="text-white-50">Home</a>
+            <span class="text-white-50 mx-2"></span>
+            <a href="" class="text-white"><u>Shopping cart</u></a>
+          </h6>
+        </nav>
+        <!-- Breadcrumb -->
+      </div>
+    </div>
+    <!-- Heading -->
+  </header>
+  <!-- cart + summary -->
+  <section class="bg-light my-5">
+    <div class="container">
+      <div class="row">
+        <!-- cart -->
+        <div class="col-lg-9">
+          <% user.cartitems.forEach(product => { %>
+
+            <div class="card border shadow-0" >
+              <div class="m-4">
+                <h4 class="card-title mb-4">Your shopping cart</h4>
+                <div class="row gy-3 mb-4">
+                  <div class="col-lg-5">
+                    <div class="me-lg-5">
+                      <div class="d-flex">
+                        <img src="/uploads/<%=  product.productId.productimage %>" class="border rounded me-3" style="width: 96px; height: 96px;" alt="" />
+                        <div class="">
+                          <p class="text-muted" ><%= product.productId.productname %></p>
+                          <p class="text-muted" id="price-<%=  product.productId.productprice %>" product-price="<%= product.productId.productprice %>"> <%= product.productId.productprice %></p>
+                          <!-- <script>
+                            console.log('Product:', <%= product.productId.productprice %>);
+                          </script> -->
+                          <span id="display-content-<%= product.productId._id %>" product-price="<%= product.productId.productprice %>"></span>
+                          <p class="text-muted" ><%= product.productId.productcatagory %></p>
+                          <p class="text-muted" id="display-<%= product.productId._id %>" ><%= product.quantity %></p>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="quantity-select" product-id="<%= product._id %>" user-id="<%= userid %>">
+                    <form>
+                      <div class="value-button" id="decrease" onclick="decreaseValue('<%= product.productId._id %>' ,'<%= user._id %>')" value="Decrease Value">-</div>
+                      <input type="number" style="padding-bottom: 4px; width: 8%;" min="1" name="number" id="number-<%= product.productId._id %>" data-value="<%= product.quantity %>" value="<%= product.quantity %>">
+                      <div class="value-button" id="increase" onclick="increaseValue('<%= product.productId._id %>','<%= user._id %>')" value="Increase Value">+</div>
+                    </form>
+                  </div>
+                  <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                    <div class="float-md-end">
+                      <!-- <a href="#!" class="btn btn-light border px-2 icon-hover-primary"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a> -->
+                      <form action="/remove/<%= userid %>/<%= product.productId._id %> " id="Remove-button" product-data="<%= product.productId._id %>" user-data="<%= userid %>"  method="post">
+                      <button class="btn btn-light border text-danger icon-hover-danger">Remove</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
 
           <% }) %>
+          <div class="border-top pt-4 mx-4 mb-4">
+            <p><i class="fas fa-truck text-muted fa-lg"></i> Free Delivery within 1-2 weeks</p>
+            <p class="text-muted">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+              aliquip
+            </p>
+          </div>
 
+        </div>
 
-        </tbody>
-      </table>
-</div>
+        <!-- cart -->
+        <!-- summary -->
+        <div class="col-lg-3">
+          <div class="card mb-3 border shadow-0">
+            <div class="card-body">
+              <form>
+                <div class="form-group">
+                  <label class="form-label">Have coupon?</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control border" name="" placeholder="Coupon code" >
+                    <button class="btn btn-light border">Apply</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-0 border">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <p class="mb-2">Total price:</p>
+                <p class="mb-2" user-data="<%= user %>" id="total-price"><%= totalPrice %></p>
+              </div>
+              <div class="d-flex justify-content-between">
+                <p class="mb-2">Discount:</p>
+                <p class="mb-2 text-success">-$60.00</p>
+              </div>
+              <div class="d-flex justify-content-between">
+                <p class="mb-2">TAX:</p>
+                <p class="mb-2">$14.00</p>
+              </div>
+              <hr />
+              <div class="d-flex justify-content-between">
+                <p class="mb-2">Total price:</p>
+                <p class="mb-2 fw-bold" id="real-total-price"><%= totalPrice %></p>
+              </div>
+
+              <div class="mt-3">
+                <a href="/checkout" class="btn btn-success w-100 shadow-0 mb-2">Checkout Page </a>
+                <a href="#" class="btn btn-light w-100 border mt-2"> Back to shop </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- summary -->
+      </div>
+    </div>
+  </section>
+  <!-- cart + summary -->
+  <section>
+    <div class="container my-5">
+      <header class="mb-4">
+        <h3>Recommended items</h3>
+      </header>
+
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card px-4 border shadow-0 mb-4 mb-lg-0">
+            <div class="mask px-2" style="height: 50px;">
+              <div class="d-flex justify-content-between">
+                <h6><span class="badge bg-danger pt-1 mt-3 ms-2">New</span></h6>
+                <a href="#"><i class="fas fa-heart text-primary fa-lg float-end pt-3 m-2"></i></a>
+              </div>
+            </div>
+            <a href="#" class="">
+              <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/7.webp" class="card-img-top rounded-2" />
+            </a>
+            <div class="card-body d-flex flex-column pt-3 border-top">
+              <a href="#" class="nav-link">Gaming Headset with Mic</a>
+              <div class="price-wrap mb-2">
+                <strong class="">$18.95</strong>
+                <del class="">$24.99</del>
+              </div>
+              <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
+                <a href="#" class="btn btn-outline-primary w-100">Add to cart</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card px-4 border shadow-0 mb-4 mb-lg-0">
+            <div class="mask px-2" style="height: 50px;">
+              <a href="#"><i class="fas fa-heart text-primary fa-lg float-end pt-3 m-2"></i></a>
+            </div>
+            <a href="#" class="">
+              <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp" class="card-img-top rounded-2" />
+            </a>
+            <div class="card-body d-flex flex-column pt-3 border-top">
+              <a href="#" class="nav-link">Apple Watch Series 1 Sport </a>
+              <div class="price-wrap mb-2">
+                <strong class="">$120.00</strong>
+              </div>
+              <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
+                <a href="#" class="btn btn-outline-primary w-100">Add to cart</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card px-4 border shadow-0">
+            <div class="mask px-2" style="height: 50px;">
+              <a href="#"><i class="fas fa-heart text-primary fa-lg float-end pt-3 m-2"></i></a>
+            </div>
+            <a href="#" class="">
+              <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp" class="card-img-top rounded-2" />
+            </a>
+            <div class="card-body d-flex flex-column pt-3 border-top">
+              <a href="#" class="nav-link">Men's Denim Jeans Shorts</a>
+              <div class="price-wrap mb-2">
+                <strong class="">$80.50</strong>
+              </div>
+              <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
+                <a href="#" class="btn btn-outline-primary w-100">Add to cart</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card px-4 border shadow-0">
+            <div class="mask px-2" style="height: 50px;">
+              <a href="#"><i class="fas fa-heart text-primary fa-lg float-end pt-3 m-2"></i></a>
+            </div>
+            <a href="#" class="">
+              <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp" class="card-img-top rounded-2" />
+            </a>
+            <div class="card-body d-flex flex-column pt-3 border-top">
+              <a href="#" class="nav-link">Mens T-shirt Cotton Base Layer Slim fit </a>
+              <div class="price-wrap mb-2">
+                <strong class="">$13.90</strong>
+              </div>
+              <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
+                <a href="#" class="btn btn-outline-primary w-100">Add to cart</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Recommended -->
+
+  <!-- Footer -->
+  <footer class="text-center text-lg-start text-muted bg-primary mt-3">
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start pt-4 pb-4">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-12 col-lg-3 col-sm-12 mb-2">
+            <!-- Content -->
+            <a href="https://mdbootstrap.com/" target="_blank" class="text-white h2">
+              MDB
+            </a>
+            <p class="mt-1 text-white">
+              © 2023 Copyright: MDBootstrap.com
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-6 col-sm-4 col-lg-2">
+            <!-- Links -->
+            <h6 class="text-uppercase text-white fw-bold mb-2">
+              Store
+            </h6>
+            <ul class="list-unstyled mb-4">
+              <li><a class="text-white-50" href="#">About us</a></li>
+              <li><a class="text-white-50" href="#">Find store</a></li>
+              <li><a class="text-white-50" href="#">Categories</a></li>
+              <li><a class="text-white-50" href="#">Blogs</a></li>
+            </ul>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-6 col-sm-4 col-lg-2">
+            <!-- Links -->
+            <h6 class="text-uppercase text-white fw-bold mb-2">
+              Information
+            </h6>
+            <ul class="list-unstyled mb-4">
+              <li><a class="text-white-50" href="#">Help center</a></li>
+              <li><a class="text-white-50" href="#">Money refund</a></li>
+              <li><a class="text-white-50" href="#">Shipping info</a></li>
+              <li><a class="text-white-50" href="#">Refunds</a></li>
+            </ul>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-6 col-sm-4 col-lg-2">
+            <!-- Links -->
+            <h6 class="text-uppercase text-white fw-bold mb-2">
+              Support
+            </h6>
+            <ul class="list-unstyled mb-4">
+              <li><a class="text-white-50" href="#">Help center</a></li>
+              <li><a class="text-white-50" href="#">Documents</a></li>
+              <li><a class="text-white-50" href="#">Account restore</a></li>
+              <li><a class="text-white-50" href="#">My orders</a></li>
+            </ul>
+          </div>
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-12 col-sm-12 col-lg-3">
+            <!-- Links -->
+            <h6 class="text-uppercase text-white fw-bold mb-2">Newsletter</h6>
+            <p class="text-white">Stay in touch with latest updates about our products and offers</p>
+            <div class="input-group mb-3">
+              <input type="email" class="form-control border" placeholder="Email" aria-label="Email" aria-describedby="button-addon2" />
+              <button class="btn btn-light border shadow-0" type="button" id="button-addon2" data-mdb-ripple-color="dark">
+                Join
+              </button>
+            </div>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+
+    <div class="">
+      <div class="container">
+        <div class="d-flex justify-content-between py-4 border-top">
+          <!--- payment --->
+          <div>
+            <i class="fab fa-lg fa-cc-visa text-white"></i>
+            <i class="fab fa-lg fa-cc-amex text-white"></i>
+            <i class="fab fa-lg fa-cc-mastercard text-white"></i>
+            <i class="fab fa-lg fa-cc-paypal text-white"></i>
+          </div>
+          <!--- payment --->
+
+          <!--- language selector --->
+          <div class="dropdown dropup">
+            <a class="dropdown-toggle text-white" href="#" id="Dropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false"> <i class="flag-united-kingdom flag m-0 me-1"></i>English </a>
+
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="Dropdown">
+              <li>
+                <a class="dropdown-item" href="#"><i class="flag-united-kingdom flag"></i>English <i class="fa fa-check text-success ms-2"></i></a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="flag-poland flag"></i>Polski</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="flag-china flag"></i>中文</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="flag-japan flag"></i>日本語</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="flag-germany flag"></i>Deutsch</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="flag-france flag"></i>Français</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="flag-spain flag"></i>Español</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="flag-russia flag"></i>Русский</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"><i class="flag-portugal flag"></i>Português</a>
+              </li>
+            </ul>
+          </div>
+          <!--- language selector --->
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- Footer -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script>
+
+   function increaseValue(productId,userid) {
+    const inputElement = document.getElementById(`number-${productId}`);
+  console.log('input.value',inputElement.value);
+  var value = parseInt(inputElement.value, 10);
+  value = isNaN(value) ? 0 : value;
+  value++;
+  inputElement.value = value;
+
+  // const inputElement = document.getElementById(`number-${productId}`);
+
+const quantity = inputElement.value;
+console.log('quantity',quantity);
+
+
+  fetch(`/incrementquantity/${userid}/${productId}/${quantity}`, {
+        method: 'post',
+      })
+
+      .then((response) => {
+      if (response.ok) {
+        console.log("sucess");
+        
+      
+       const displayQuantity = document.getElementById(`display-${productId}`);
+        displayQuantity.textContent = quantity;
+
+        
+    const priceElement = document.getElementById(`display-content-${productId}`);
+    
+        const total=priceElement.getAttribute('product-price');
+        const totalprice=document.getElementById('total-price');
+        const totalAmount=parseFloat(totalprice.textContent)
+        totalprice.textContent=totalAmount+parseFloat(total);
+        console.log('total',total,totalAmount);
+
+        const realtotalprice=document.getElementById('real-total-price')
+        realtotalprice.textContent=totalAmount+parseFloat(total);
+
+
+     } else {
+        console.log("Failed to update the quantity");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+
+  // You can update the total price here if needed
+}
+
+function decreaseValue(productId,userid) {
+  const inputElement = document.getElementById(`number-${productId}`);
+  var value = parseInt(inputElement.value, 10);
+  value = isNaN(value) ? 0 : value;
+  value = value <= 1 ? 1 : value - 1;
+  console.log(inputElement.value)
+  console.log("value",value)
+
+
+  inputElement.value = value;
+  const quantity = inputElement.value;
+  console.log("quantity",quantity);
+  console.log("userid",userid,productId);
+
+  // router.post('/decrementquantity/:userid/:productid/:quantity',decrementquantity);
+
+
+  
+  fetch(`/decrementquantity/${userid}/${productId}/${quantity}`, {
+        method: 'post',
+      })
+
+      .then((response) => {
+      if (response.ok) {
+        console.log("sucess");
+        const displayQuantity = document.getElementById(`display-${productId}`);
+        displayQuantity.textContent = quantity;
+
+           
+    const priceElement = document.getElementById(`display-content-${productId}`);
+        const total=priceElement.getAttribute('product-price');
+        const totalprice=document.getElementById('total-price');
+        const totalAmount=parseFloat(totalprice.textContent)
+        totalprice.textContent=totalAmount-parseFloat(total);
+        console.log('total',total,totalAmount);
+
+        const realtotalprice=document.getElementById('real-total-price')
+        realtotalprice.textContent=totalAmount-parseFloat(total);
+
+      } else {
+        console.log("Failed to update the quantity");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  
+ }
+
+
+    // quantity increment
+
+//     const quantitySelects = document.querySelectorAll('.quantity-select');
+//   quantitySelects.forEach(select => {
+//   const userid = select.getAttribute('user-id');
+//   const productid = select.getAttribute('product-id');
+//   const inputField = select.querySelector('#number');
+
+//   inputField.addEventListener('change', async () => {
+//     const quantity = inputField.value;
+
+//     try {
+//       const response = await fetch(`/incrementquantity/${userid}/${productid}/${quantity}`, {
+//         method: 'post',
+//       });
+
+//       if (response.ok) {
+//         const displayQuantity = select.querySelector('#display-quantity');
+//         displayQuantity.textContent = quantity;
+
+        
+//       } else {
+//         console.log("Failed to update the quantity");
+//       }
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   });
+// });
+
+
+
+
+
+// remove cart using fetch
+// const removeButtons = document.querySelectorAll('.btn.text-danger.icon-hover-danger');
+
+// removeButtons.forEach((button) => {
+//   console.log("kkkkkkk")
+//   button.addEventListener('click', (event) => {
+//     const productId = button.getAttribute('product-data');
+//     const userId = button.getAttribute('user-data');
+
+//     // Send a DELETE request to remove the item from the server
+//     fetch(`/remove/${userId}/${productId}`, {
+//       method: 'POST',
+//     })
+//       .then((response) => {
+//         if (response.ok) {
+
+//           console.log("ok");
+//         } else {
+//           console.log("Failed to remove the item");
+//         }
+//       })
+//       .catch((error) => {
+//         console.error(error);
+//       });
+//   });
+// });
+
+
+
+
+   
+
+
+  
+
+
+
+
+   </script>
 
 </body>
 </html>

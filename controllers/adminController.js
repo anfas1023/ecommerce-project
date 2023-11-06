@@ -1,6 +1,7 @@
 const User=require('../model/userModel')
 const Product=require('../model/productModel')
-const Catagory=require('../model/categoryManagment')
+const Catagory=require('../model/categoryManagment');
+const Order=require('../model/orderModel');
 
 
 
@@ -141,8 +142,11 @@ const edituserpost = async (req, res) => {
   }
 //   add product get
 
-  const addproductget=(req,res)=>{
-res.render('addproduct')
+  const addproductget=async(req,res)=>{
+    const catagory=await Catagory.find();
+const categoryNames = catagory.map(category => category.catagoryname);
+console.log("Categories:", categoryNames);
+res.render('addproduct',{categoryNames})
   }
 
 //   add product post
@@ -175,8 +179,13 @@ res.render('addproduct')
   const editproductget=async(req,res)=>{
     const id=req.params.id
     const product= await Product.findById(id)
-    res.render('editproduct',{product:product});
+
+const catagory=await Catagory.find();
+const categoryNames = catagory.map(category => category.catagoryname);
+console.log("Categories:", categoryNames);
+    res.render('editproduct',{product:product,categoryNames:categoryNames});
   }
+
 
 //   edit product post
   const editproductpost=async(req,res)=>{
@@ -195,7 +204,7 @@ res.render('addproduct')
             productcatagory: req.body.productcatagory,
             productimage: req.file.filename,
         }
-        const newproduct= await Product.findByIdAndUpdate(id,editednewproduct)
+        const newproduct= await Product.findByIdAndUpdate(id,editednewproduct);
 
         if(!newproduct){
             res.status(400)
@@ -260,6 +269,47 @@ res.render('catagorymanagment',{allcatagory:allcatagory});
     }
 }
 
+const orderManagnment=async(req,res)=>{
+    try {
+            const orders = await Order.find();
+            const allProducts = [];
+
+            orders.forEach(order => {
+                order.products.forEach(product => {
+                    const productInfo = {
+                        orderId: order._id,
+                        productName: product.productName,
+                        quantity: product.quantity,
+                        price: product.price,
+                        imageUrl: product.imageUrl,
+                        customerName:order.customerName,
+                        totalPrice:order.totalPrice,
+                        orderDate:order.orderDate,
+                        orderStatus:order.status
+                    };
+                    allProducts.push(productInfo);
+                });
+            });
+
+            console.log("allProducts",allProducts)
+            res.render('ordermanagment',{allProducts:allProducts,orders:orders});
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+const statusUpdate=async(req,res)=>{
+    const orderId=req.params.orderid
+    const selectedStatus=req.params.selectedStatus
+    console.log("req.params.selectedStatus",selectedStatus)
+    console.log("orderId",orderId)
+    const order = await Order.findByIdAndUpdate(orderId, { status: selectedStatus }, { new: true });
+
+    console.log("order",order);
+    res.redirect('/orderManagnment');
+}
+
 
 
 
@@ -282,5 +332,7 @@ module.exports={
     categorymanagmentget,
     addcatagory,
     editcatagory,
+    orderManagnment,
+    statusUpdate
 
 }

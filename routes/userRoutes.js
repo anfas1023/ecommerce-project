@@ -7,9 +7,26 @@ const { loginuser,
     signuppost,
     loginuserpost,
     otppost,
-    getcart,
-    postcart,
     home,
+    otpget,
+    resendotp,
+    Cartget,
+    addCart,
+    removecart,
+    incrementquantity,
+    decrementquantity,
+    productlist,
+    productDetail,
+    userProfile,
+    userprofileEdit,
+    userprofilePost,
+    addAddresGet,
+    addAddressPost,
+    checkOutPageGet,
+    editAddress,
+    orderManagnmentPost,
+    ordersucessfull,
+    ordertrackingdetail,
 }=require('../controllers/userController')
 
 require('../middlewares/GoogleAuth')(passport)
@@ -30,26 +47,71 @@ router.get('/login',loginuser);
 router.post('/login',loginuserpost);
 router.get('/signup',signup);
 router.post('/signup',signuppost);
+router.get('/otp',otpget)
 router.post('/otp', otppost);
-router.get('/cart',getcart);
-router.post('/cartpost',upload.single('filename'),postcart);
+router.post('/otpresend',resendotp);
+
+router.get('/cart',Cartget);
+
+router.post('/addCart/:userid/:productid',addCart);
+router.post('/remove/:userid/:productid', removecart);
+
+router.post('/incrementquantity/:userid/:productid/:quantity',incrementquantity);
+router.post('/decrementquantity/:userid/:productid/:quantity',decrementquantity);
+
+router.get('/products',productlist);
+router.get('/productdetail/:id',productDetail);
+
+router.get('/userprofile',userProfile);
+router.get('/userprofileedit',userprofileEdit);
+
+router.post('/userprofileedit',userprofilePost);
+router.get('/addaddress', addAddresGet);
+router.post('/addaddress', addAddressPost);
+router.post('/editAddress',editAddress);
+
+router.get('/checkout',checkOutPageGet);
+
+router.post('/addorder/:addressId',orderManagnmentPost);
+
+router.get('/ordersucessfull', ordersucessfull);
+router.get('/ordertracking', ordertrackingdetail);
+
+
+
+
+
+
 
 router.get('/auth/google',passport.authenticate('google',{
     scope:['profile','email']
 }));
 
 router.get('/auth/google/callback',passport.authenticate('google',{
-    successRedirect: '/sucess',
     failureRedirect:'/failed',
-}));
+}),
+function (req,res){
+
+    console.log("sucess");
+    if(req.user){
+        console.log("req.user",req.user);
+        req.session.new=true
+     return  res.redirect('/home');
+
+    }
+  return  res.redirect('/login');
+
+}
+);
 
 router.get('/sucess',(req,res)=>{
-    res.send("welcome")
+    res.send("welcome");
 })
 
 router.get('/failure',(req,res)=>{
     res.send("error");
 })
+
 
 
 

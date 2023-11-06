@@ -1,7 +1,13 @@
 const GoogleStrategy=require("passport-google-oauth2").Strategy
 const passport = require("passport");
 const dotenv=require('dotenv').config();
-const googleUsers=require('../model/googleSchema')
+const googleUsers=require('../model/googleSchema');
+const session = require('express-session');
+const express=require('express')
+const router=express.Router();
+
+
+router.use(session({ secret: 'your_secret_key', resave: true, saveUninitialized: true }));
 
 
 module.exports=(passport)=>{
@@ -17,7 +23,7 @@ module.exports=(passport)=>{
             const userId=profile.id
             let existingUser=await googleUsers.findOne({userId});
             if(existingUser){
-                return done(null,existingUser)
+                return done(null,existingUser);
             }else{
                 const newUser=new googleUsers({
                     username:profile.displayName,
@@ -25,14 +31,16 @@ module.exports=(passport)=>{
                 });
 
 
+
                 newUser.save()
                 .then((user)=>{
                     console.log('user saved',user)
+                    return done(null,user);
                 }).catch((error)=>{
                     console.log("New user cannot save",error);
+                    done(error, false);
 
                 })
-                return done(null,newUser);
             }
 
 

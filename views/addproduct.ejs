@@ -79,23 +79,26 @@
             <label for="username">Productname</label>
             <input type="text" id="username" name="productname" required>
 
-            <label for="email">productprice</label>
+            <label for="number">productprice</label>
             <input type="number" id="email" name="productprice" required>
 
-            <label for="password">productdescription</label>
-            <input type="password" id="description" name="productdescription" required>
+            <label for="text">productdescription</label>
+            <input type="text" id="description" name="productdescription" required>
 
-            <label for="phone">productstocks</label>
-            <input type="tel" id="stocks" name="productstocks" required>
+            <label for="text">productstocks</label>
+            <input type="text" id="stocks" name="productstocks" required>
 
-            <label for="phone">productcatagory</label>
-            <input type="tel" id="catagory" name="productcatagory" required>
+            <select id="catagory" name="productcatagory">
+                <option value="<%= categoryNames[0]  %>"><%= categoryNames[0]  %></option>
+                <option value="<%= categoryNames[1]  %>"><%= categoryNames[1]  %></option>
+                <!-- Add more options as needed -->
+            </select>
             <div id="parent">
                 <label for="file">Productimage</label>
                 <input type="file" id="image" name="filename"  required>
 
             </div>
-            <button type="submit">Sign Up</button>
+            <button type="submit">Add product</button>
         </form>
     </div>
 

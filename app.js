@@ -1,15 +1,15 @@
 const express=require('express')
-const app=express()
-const path=require('path')
+const app=express();
+const path=require('path');
 const userRoutes=require('./routes/userRoutes')
 const adminRoutes=require('./routes/adminRoutes')
 const mongoDBconnection=require('./config/dbConnection')
-const dotenv=require('dotenv').config()
+const dotenv=require('dotenv').config();
 const session = require('express-session');
-const errorhandllers=require('./middlewares/errorhandellingmiddleware')
+const errorhandllers=require('./middlewares/errorhandellingmiddleware');
 
 
-mongoDBconnection()
+mongoDBconnection();
 
 
 // view engine setup
@@ -22,7 +22,9 @@ const port=5000
 // middleware set ups
 
 console.log(path.join(__dirname, "public"));
-app.use(express.static(path.join(__dirname, "public")))
+// app.use(express.static(path.join(__dirname, "public")))
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(session({
@@ -31,7 +33,6 @@ app.use(session({
     saveUninitialized: true
 }))
 const nocache = (req,res,next)=> {
-    console.log('cache');
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     next();
 
@@ -43,7 +44,7 @@ app.use(errorhandllers)
 
 
 app.use('/',userRoutes);
-app.use('/',adminRoutes)
+app.use('/',adminRoutes);
 
 
 app.listen(port,()=>{

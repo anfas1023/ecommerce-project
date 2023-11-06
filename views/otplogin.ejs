@@ -23,9 +23,16 @@
                             <button type="submit" class="btn btn-success mt-3" id="verifyOTP">Verify OTP</button>
                         </form>
                     </div>
-                    <p>OTP Will Valid For Only 10secs</p>
+                    <p>OTP Will Valid For Only 20secs</p>
+                    <p><%= message %></p>
+                    <form action="/otpresend" method="post">
 
-                    <!-- <p> Resend OTP in <span id="countdowntimer">30 </span> Seconds</p> -->
+                        <button class=" btn btn-primary">OTP Resend</button>
+
+                    </form>
+
+
+                    <p> Resend OTP in <span id="countdowntimer"> </span> Seconds</p>
                 </div>
             </div>
         </div>
@@ -41,6 +48,22 @@
     // if(timeleft <= 0)
     //     clearInterval(downloadTimer);
     // },10000);
+
+    window.onload = () => {
+    var timeleft = 30;
+    var countdownTimer = document.getElementById("countdowntimer");
+
+    var interval = setInterval(() => {
+        timeleft--;
+        countdownTimer.textContent = timeleft; 
+        if (timeleft <= 0) {
+            clearInterval(interval);
+        }
+    }, 1000);
+};
+
+
+    
     </script>
 </body>
 </html>

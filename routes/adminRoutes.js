@@ -16,6 +16,8 @@ const { adminget,
     categorymanagmentget,
     addcatagory,
     editcatagory,
+    orderManagnment,
+    statusUpdate
 
 }=require('../controllers/adminController')
 const upload=require('../middlewares/multer')
@@ -43,6 +45,9 @@ router.post('/editproduct/:id',upload.single('filename'),editproductpost);
 router.get('/catagorymanagment', categorymanagmentget);
 router.post('/addcatagory',addcatagory);
 router.post('/editcatagory/:id',editcatagory);
+
+router.get('/orderManagnment',orderManagnment);
+router.post('/statusorder/:orderid/:selectedStatus',statusUpdate);
 
 
 

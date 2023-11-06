@@ -87,9 +87,9 @@
 
                             <!-- Block/Unblock Buttons -->
                             <% if (user.isBlocked) { %>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#unblockModal<%= user._id %>">Unblock</button>
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#unblockModal<%= user._id %>">Unblock</button>
                             <% } else { %>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#blockModal<%= user._id %>">Block</button>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#blockModal<%= user._id %>">Block</button>
                             <% } %>
                         </td>
                     </tr>
@@ -104,8 +104,8 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <!-- Content for unblocking user -->
-                                </div>
+                                    <p>Are you want Unblock</p>
+                                  </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     <a href="/unblock/<%= user._id %>" class="btn btn-success">Unblock</a>
@@ -124,7 +124,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <!-- Content for blocking user -->
+                                   <p>Are you want to Block</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

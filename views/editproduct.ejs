@@ -85,15 +85,21 @@
                 <label for="number">productprice</label>
                 <input type="number" id="number" name="productprice" required>
 
-            <label for="text">productdescription</label>
-            <input type="text" id="description" name="productdescription" required>
+                <label for="text">productdescription</label>
+                <input type="text" id="description" name="productdescription" required>
 
                 <label for="stocks">productstocks</label>
                 <input type="text" id="stocks" name="productstocks" required>
 
 
-                <label for="catagory">productcatagory</label>
-                <input type="text" id="catagory" name="productcatagory" required>
+                <!-- <label for="catagory">productcatagory</label>
+                <input type="text" id="catagory" name="productcatagory" required> -->
+                <label for="catagory">Product Category</label>
+                <select id="catagory" name="productcatagory">
+                    <option value="<%= categoryNames[0]  %>"><%= categoryNames[0]  %></option>
+                    <option value="<%= categoryNames[1]  %>"><%= categoryNames[1]  %></option>
+                    <!-- Add more options as needed -->
+                </select>
 
 
                 <div id="parent">
