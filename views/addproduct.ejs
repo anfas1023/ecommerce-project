@@ -90,15 +90,38 @@
 
             <label for="phone">productcatagory</label>
             <input type="tel" id="catagory" name="productcatagory" required>
+            <div id="parent">
+                <label for="file">Productimage</label>
+                <input type="file" id="image" name="filename"  required>
 
-            <label for="file">Productimage</label>
-            <input type="file" id="image" name="filename"  required>
-
-
-
-
+            </div>
             <button type="submit">Sign Up</button>
         </form>
     </div>
+
+    <script>
+
+        
+const image=document.getElementById("image")
+       
+       image.addEventListener("change", () => {
+     const reader = new FileReader();
+     reader.onload = function (e) {
+         const parent = document.getElementById("parent");
+         const displayedImage = document.getElementById("newone"); 
+ 
+         if (displayedImage) {
+             parent.removeChild(displayedImage); 
+         }
+ 
+         const newImage = document.createElement("img");
+         newImage.src = e.target.result;
+         newImage.id ="newone"
+         parent.appendChild(newImage);
+     };
+     reader.readAsDataURL(image.files[0]);
+ });
+
+    </script>
 </body>
 </html>

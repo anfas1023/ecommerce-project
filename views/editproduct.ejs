@@ -76,11 +76,6 @@
     <div class="container">
         <h2>Edit product</h2>
 
-
-
-
-
-
         <form action="/editproduct/<%= product._id %>" id="edit-product" class="btn btn-primary" product-id="<%= product._id %>" product-name="<%=  product.productname  %>" product-price="<%= product.productprice %>" product-description="<%= product.productdescription %>" product-stocks="<%= product.productstocks %>" product-catagory="<%= product.productcatagory %>" product-image="<%= product.productimage %>" method="POST" enctype="multipart/form-data" >
 
 
@@ -101,10 +96,13 @@
                 <input type="text" id="catagory" name="productcatagory" required>
 
 
-            <label for="image">Productimage</label>
-            <input type="file" id="image" name="filename" required>
-            <img src="/uploads/<%= product.productimage %>" alt="image is here" height="100px" width="80px">
-            <button type="submit">edit product</button>
+                <div id="parent">
+                    <label for="image">Productimage</label>
+                    <input type="file" id="image" name="filename" required>
+
+                </div>
+
+                <button type="submit">edit product</button>
         </form>
     </div>
     <script>
@@ -114,6 +112,7 @@
         const description=edit.getAttribute("product-description")
         const stocks=edit.getAttribute("product-stocks");
         const catagory=edit.getAttribute("product-catagory");
+        const IMAGE=edit.getAttribute("product-image")
         
 
 
@@ -122,6 +121,28 @@
         document.getElementById("description").value=description
         document.getElementById("stocks").value=stocks
         document.getElementById("catagory").value=catagory
+
+        const image=document.getElementById("image")
+       
+      image.addEventListener("change", () => {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const parent = document.getElementById("parent");
+        const displayedImage = document.getElementById("newone"); 
+
+        if (displayedImage) {
+            parent.removeChild(displayedImage); 
+        }
+
+        const newImage = document.createElement("img"); 
+        newImage.src = e.target.result;
+        newImage.id ="newone"
+        parent.appendChild(newImage);
+    };
+    reader.readAsDataURL(image.files[0]);
+});
+
+
        
         
 

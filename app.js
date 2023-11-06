@@ -6,6 +6,7 @@ const adminRoutes=require('./routes/adminRoutes')
 const mongoDBconnection=require('./config/dbConnection')
 const dotenv=require('dotenv').config()
 const session = require('express-session');
+const errorhandllers=require('./middlewares/errorhandellingmiddleware')
 
 
 mongoDBconnection()
@@ -37,6 +38,7 @@ const nocache = (req,res,next)=> {
 }
 
 app.use(nocache)
+app.use(errorhandllers)
 
 
 
