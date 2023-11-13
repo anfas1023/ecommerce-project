@@ -20,7 +20,12 @@ const { adminget,
     statusUpdate
 
 }=require('../controllers/adminController')
-const upload=require('../middlewares/multer')
+const upload=require('../middlewares/multer');
+
+const logged=(req,res,next)=>{
+    console.log("here");
+    next();
+}
 
 router.get('/admin',adminget)
 router.post('/admin',adminpost)
@@ -37,10 +42,15 @@ router.post('/edituser/:id',edituserpost);
 router.get('/productmanagment',productmanagmentget);
 
 router.get('/addproductget',addproductget)
-router.post('/addproduct',upload.single('filename'),addproduct)
+router.post('/addproduct',upload.array('filename',5),addproduct);
 
 router.get('/editproduct/:id',editproductget);
-router.post('/editproduct/:id',upload.single('filename'),editproductpost);
+router.post('/editproduct/:id',upload.array('filename',5), editproductpost);
+
+
+
+
+
 
 router.get('/catagorymanagment', categorymanagmentget);
 router.post('/addcatagory',addcatagory);

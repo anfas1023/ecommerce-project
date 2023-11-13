@@ -183,9 +183,73 @@ a.list-group-item, .list-group-item-action {
     content: '';
 }
     </style>
+     <!-- //Meta tag Keywords -->
+    <!-- Custom-Files -->
+    <!-- <link rel="stylesheet" href="/bootstrap.css"> -->
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Bootstrap-Core-CSS -->
+    <link rel="stylesheet" href="/css/style.css" type="text/css" media="all" >
+    <!-- Style-CSS -->
+    <!-- font-awesome-icons -->
+    <link href="/css/font-awesome.css" rel="stylesheet">
+    <!-- //font-awesome-icons -->
+    <!-- /Fonts -->
+    <link href="//fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- //Fonts -->
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
+    <div class="main-sec inner-page">
+        <!-- //header -->
+        <header class="py-sm-3 pt-3 pb-2" id="home">
+            <div class="container">
+                <!-- nav -->
+                <div class="top-w3pvt d-flex">
+                    <div id="logo">
+                        <h1> <a href="index.html"><span class="log-w3pvt">B</span>cart</a> <label class="sub-des">Online Store</label></h1>
+                    </div>
+    
+                    <div class="forms ml-auto">
+                        <a href="/login" class="btn"><span class="fa fa-user-circle-o"></span> Sign In</a>
+                        <a href="/signup" class="btn"><span ><i class="fa-solid fa-user-plus"></i></span> Sign Up</a>
+                    </div>
+                </div>
+                <div class="nav-top-wthree">
+                    <nav>
+                        <label for="drop" class="toggle"><span class="fa fa-bars"></span></label>
+                        <input type="checkbox" id="drop" >
+                        <ul class="menu">
+                            <li><a href="/home">Home</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li >
+                                <!-- First Tier Drop Down -->
+                                <a href="/cart">Cart</a>
+    
+                            </li>
+    
+                            <li ><a href="/products">Collections</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <!-- //nav -->
+                    <div class="search-form ml-auto">
+                        <div class="form-w3layouts-grid">
+                            <form action="#" method="post" class="newsletter">
+                                <input class="search" type="search" placeholder="Search here..." required="">
+                                <button class="form-control btn" value=""><span class="fa fa-search"></span></button>
+    
+                            </form>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </header>
+        <!-- //header -->
+    </div>
     <div class="container mt-5">
         <div class="row">
             <div class="col-lg-4 pb-5">
@@ -196,7 +260,7 @@ a.list-group-item, .list-group-item-action {
                         <div class="author-card-avatar"><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Daniel Adams">
                         </div>
                         <div class="author-card-details">
-                            <h5 class="author-card-name text-lg">Daniel Adams</h5><span class="author-card-position">Joined February 06, 2017</span>
+                            <h5 class="author-card-name text-lg"><%= user.username  %></h5><span class="author-card-position">Joined February 06, 2017</span>
                         </div>
                     </div>
                 </div>
@@ -205,24 +269,11 @@ a.list-group-item, .list-group-item-action {
                         <a class="list-group-item" href="#">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div><i class="fe-icon-shopping-bag mr-1 text-muted"></i>
-                                    <div class="d-inline-block font-weight-medium text-uppercase">Orders List</div>
-                                </div><span class="badge badge-secondary">6</span>
+                                    <div class="d-inline-block font-weight-medium text-uppercase">user Details</div>
+                                </div>
                             </div>
-                        </a><a class="list-group-item active" href="#"><i class="fe-icon-user text-muted"></i>Profile Settings</a><a class="list-group-item" href="#"><i class="fe-icon-map-pin text-muted"></i>Addresses</a>
-                        <a class="list-group-item" href="https://www.bootdey.com/snippets/view/bs4-wishlist-profile-page" target="__blank">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div><i class="fe-icon-heart mr-1 text-muted"></i>
-                                    <div class="d-inline-block font-weight-medium text-uppercase">My Wishlist</div>
-                                </div><span class="badge badge-secondary">3</span>
-                            </div>
-                        </a>
-                        <a class="list-group-item" href="https://www.bootdey.com/snippets/view/bs4-account-tickets" target="__blank">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div><i class="fe-icon-tag mr-1 text-muted"></i>
-                                    <div class="d-inline-block font-weight-medium text-uppercase">My Tickets</div>
-                                </div><span class="badge badge-secondary">4</span>
-                            </div>
-                        </a>
+                        </a> <a class="list-group-item" href="/ordertracking">order Detail</a>
+                        <a class="list-group-item" href="/addaddress">Addresses</a>
                     </nav>
                 </div>
             </div>

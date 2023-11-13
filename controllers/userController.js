@@ -18,7 +18,7 @@ const transporter=nodemailer.createTransport({
 
 
 const loginuser=(req,res)=>{
-    if(req.session.new){
+    if(req.session.userId){
       res.redirect('/home')
 
 }else{
@@ -27,15 +27,15 @@ const loginuser=(req,res)=>{
 }
 
 const home=async(req,res)=>{
-    if(req.session.new){
-        userId=req.session.userId
+    if(req.session.userId){
+    const userId=req.session.userId
 
         const allproduct= await Product.find()
         res.render('home',{allproduct:allproduct,userId:userId});
 
     }else{
         console.log("req.session.new",req.session.new);
-        res.redirect('/login')
+        res.redirect('/login');
     }
 
 }
@@ -52,13 +52,12 @@ const loginuserpost=async(req,res)=>{
 
 
         if(await bcrypt.compare(req.body.password,check.password) && check.isBlocked===false && req.body.email===check.email){
-            req.session.new=true
             req.session.userId = check._id;
 
             res.redirect('/home');
 
         }else{
-            res.render('/login',{message:"not valid email and password"});
+            res.render('login',{message:"not valid email and password"});
         }
 
     }catch(error){
@@ -67,19 +66,24 @@ const loginuserpost=async(req,res)=>{
 }
 
 const signup=(req,res)=>{
-    console.log("strt");
-res.render('signup',{message:" "});
+    if(req.session.userId){
+        res.redirect('/home')
+    }else{
+
+        res.render('signup',{message:" "});
+    }
+    
+
 }
 
 
 
  const signuppost= async(req,res)=>{
-    const otp=otpgenerator.generate(6,{digits:true,upperCaseAlphabets:false,lowerCaseAlphabets:false,specialChars:false});
+    const otp=otpgenerator.generate(4,{digits:true,upperCaseAlphabets:false,lowerCaseAlphabets:false,specialChars:false});
 
     const check=await User.findOne({email:req.body.email});
 
     if(check){
-        console.log("chech")
       return  res.render('signup',{message:"Email address already there"});
     }
 
@@ -131,19 +135,23 @@ res.render('signup',{message:" "});
 
         const newUser = await User.findOne({ username: data.username });
 
-        req.session.userId=newUser._id
-
     return res.redirect('/otp');
 
  }
 
 
  const otpget=(req,res)=>{
-    res.render('otplogin',{message:" "});
+    if(req.session.userId){
+        res.redirect('/home');
+    }else{
+        res.render('otplogin',{message:" "});
+
+    }
+    
  }
 
  const resendotp=async(req,res)=>{
-    const otp=otpgenerator.generate(6,{digits:true,upperCaseAlphabets:false,lowerCaseAlphabets:false,specialChars:false});
+    const otp=otpgenerator.generate(4,{digits:true,upperCaseAlphabets:false,lowerCaseAlphabets:false,specialChars:false});
     Email=req.session.email
     const update = await User.findOneAndUpdate({ email: Email },{$set:{otp:otp}},{new:true});
     const user=await User.findOne({email:Email})
@@ -232,6 +240,7 @@ const Cartget=async(req,res)=>{
         if(!user){
             throw new Error("cannot find the user");
         }
+        console.log("user",user)
         const totalPrice = user.cartitems.reduce((acc, curr) => {
             let total= acc +parseInt(curr.productId.productprice * curr.quantity);
             console.log("total",total)
@@ -285,8 +294,8 @@ const addCart=async(req,res)=>{
                user.cartitems.push(cartItems);
 
     }
-    await user.save()
-   return res.redirect('/cart')
+    await user.save();
+   return res.redirect('/cart');
 
 
     }catch(error){
@@ -430,14 +439,27 @@ const decrementquantity=async(req,res)=>{
 }
 // product page
 
-const productlist=async(req,res)=>{
-   try {
-    const allproduct= await Product.find()
-    res.render('productlistgrid',{allproduct:allproduct});
-   } catch (error) {
-    console.log(error)
-   }
-}
+const productlist = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 6;
+        const skip = (page - 1) * limit;
+
+      const allproduct = await Product.find();
+      const totalCount = allproduct.length;
+      const totalPages = Math.ceil(totalCount / limit);
+
+      const paginatedProducts = await Product.find()
+        .skip(skip)
+        .limit(limit);
+
+      res.render('productlistgrid', { allproduct: paginatedProducts, totalPages: totalPages });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send('Internal Server Error');
+    }
+};
+
 
 const productDetail=async(req,res)=>{
     try{
@@ -447,7 +469,6 @@ const productDetail=async(req,res)=>{
         console.log("userid",req.session.userId);
         const singleproduct=await Product.findById(productId);
 
-        console.log("singleproduct",singleproduct)
         res.render('productdetailpage',{singleproduct:singleproduct,userid:userid});
     }catch(error){
         console.log(error)
@@ -516,18 +537,35 @@ res.redirect("/login")
 
 // address managment
 
-const addAddresGet=(req,res)=>{
-    res.render('addaddress');
+const addAddresGet=async(req,res)=>{
+    try{
+        if(req.session.userId){
+            const userid=req.session.userId
+
+            const user=await User.findById(userid);
+
+            res.render('addaddress',{user});
+        }else{
+            res.redirect('/login')
+        }
+
+
+    }catch(error){
+        console.log(error)
+
+    }
+
 }
 
 const addAddressPost=async(req,res)=>{
 
     try{
     if(req.session.userId){
-        const userId= req.session.userId
+        const userId= req.session.userId;
         console.log("req.body",req.body);
        const userAddress={
         street:req.body.street,
+
         city:req.body.city,
         state: req.body.state,
         pincode:req.body.pincode,
@@ -573,10 +611,17 @@ const checkOutPageGet=async(req,res)=>{
         const product =await User.findById(userId).populate(
             {path:'cartitems.productId',model:'Product'}
         );
-        res.render('checkoutpage',{address:user.address,userproduct:product.cartitems,product:product});
+        if (product.cartitems.length === 0) {
+          return  res.redirect('/cart');
+        }
+
+        console.log("address",user.address);
+        console.log("userproduct",product.cartitems);
+        console.log("product",product)
+       return res.render('checkoutpage',{address:user.address,userproduct:product.cartitems,product:product});
 
     }else{
-        res.redirect('/login');
+       return res.redirect('/login');
     }
 
 }
@@ -610,13 +655,12 @@ const orderManagnmentPost = async (req, res) => {
             if (!address) {
                 return res.status(404).json({ error: 'Address not found' });
             }
+            console.log("user",user)
 
             const orderProducts = user.cartitems.map((cartItem) => ({
-                productName: cartItem.productId.productname,
-                quantity: cartItem.quantity,
-                price: cartItem.productId.productprice,
-                imageUrl: cartItem.productId.productimage,
+                productId: cartItem.productId._id
             }));
+            console.log("orderProductsss",orderProducts.productId);
 
             const totalPrice = user.totalPrice;
 
@@ -673,29 +717,24 @@ const ordertrackingdetail = async (req, res) => {
     if (req.session.userId) {
         const userId = req.session.userId;
         console.log('User ID:', userId);
-        const orders = await Order.find({ user: userId }).populate('products');
+        const orders = await Order.find({ user: userId }).populate('products.productId');
 
-        // const allProducts = orders.flatMap(order => {
-        //     return order.products.map(product => ({
-        //         orderId: order._id,
-        //         productName: product.productName,
-        //         quantity: product.quantity,
-        //         price: product.price,
-        //         imageUrl: product.imageUrl,
-        //         customerName: order.customerName,
-        //         totalPrice: order.totalPrice,
-        //         orderDate: order.orderDate,
-        //         status: order.status,
-        //     }));
-        // });
-
-        console.log('orders:', orders);
         // console.log('orders:', orders);
         res.render('ordertrackingdetail', { orders });
     } else {
         res.redirect('/login');
     }
 };
+
+const cancelOrder=async(req,res)=>{
+    const orderId=req.params.id
+    console.log("id",orderId);
+    const order= await Order.findByIdAndUpdate(orderId,{$set:{status:"cancel"}},{new:true});
+    if(!order){
+        throw new Error("canno cancel the order")
+    }
+    res.redirect('/ordertracking');
+}
 
 
 
@@ -740,5 +779,6 @@ module.exports={
     orderManagnmentPost,
     ordersucessfull,
     ordertrackingdetail,
+    cancelOrder,
 }
 

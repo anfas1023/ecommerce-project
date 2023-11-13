@@ -27,6 +27,7 @@ const { loginuser,
     orderManagnmentPost,
     ordersucessfull,
     ordertrackingdetail,
+    cancelOrder,
 }=require('../controllers/userController')
 
 require('../middlewares/GoogleAuth')(passport)
@@ -76,6 +77,8 @@ router.post('/addorder/:addressId',orderManagnmentPost);
 
 router.get('/ordersucessfull', ordersucessfull);
 router.get('/ordertracking', ordertrackingdetail);
+
+router.post('/cancelorder/:id',cancelOrder)
 
 
 

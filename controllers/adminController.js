@@ -135,8 +135,6 @@ const edituserpost = async (req, res) => {
   const productmanagmentget=async(req,res)=>{
 
     const allproduct=await Product.find()
-    console.log(allproduct);
-
     res.render("productmanagment",{allproduct:allproduct})
 
   }
@@ -145,90 +143,117 @@ const edituserpost = async (req, res) => {
   const addproductget=async(req,res)=>{
     const catagory=await Catagory.find();
 const categoryNames = catagory.map(category => category.catagoryname);
-console.log("Categories:", categoryNames);
-res.render('addproduct',{categoryNames})
+res.render('addproduct',{categoryNames,message:" "})
   }
 
 //   add product post
 
   const addproduct=async(req,res)=>{
     try{
-        if(!req.file){
-            console.log("error ocuur wil euploadiing")
+        if(!req.files){
+            console.log("error ocuur wil euploadiing");
             throw new Error("no file founded")
         }
+        const images = req.files.map(file => ({ filename: file.filename, data: file.buffer, type: file.mimetype }));
         const newproduct = {
             productname: req.body.productname,
             productprice: req.body.productprice,
             productdescription: req.body.productdescription,
             productstocks: req.body.productstocks,
             productcatagory: req.body.productcatagory,
-            productimage: req.file.filename,
+            productimage:images,
         };
-        console.log(req.file.filename)
         const addedproduct=await Product.insertMany([newproduct]);
-           console.log(addedproduct);
-           res.redirect('/productmanagment');
+        return res.redirect('/productmanagment');
     }catch(error){
-        console.log(error)
+        console.log(error);
     }
   }
 
 //   edit product get
+const mongoose = require('mongoose');
 
-  const editproductget=async(req,res)=>{
-    const id=req.params.id
-    const product= await Product.findById(id)
+const editproductget = async (req, res) => {
+    try {
+        const id = req.params.id;
 
-const catagory=await Catagory.find();
-const categoryNames = catagory.map(category => category.catagoryname);
-console.log("Categories:", categoryNames);
-    res.render('editproduct',{product:product,categoryNames:categoryNames});
-  }
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid product ID' });
+        }
+
+        const product = await Product.findById(id);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        const catagory = await Catagory.find();
+        const categoryNames = catagory.map((category) => category.catagoryname);
+
+        res.render('editproduct', { product: product, categoryNames: categoryNames });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+
 
 
 //   edit product post
-  const editproductpost=async(req,res)=>{
-    try{
-        const id=req.params.id
-        console.log(id)
-        if(!req.file){
-            throw new Error("cannot get the  ")
-            console.log("error");
+ // edit product post
+const editproductpost = async (req, res) => {
+    try {
+        const id = req.params.id;
+        console.log(id);
+        console.log(req.files)
+        if (!req.files) {
+            throw new Error("No file found");
         }
-        const editednewproduct={
-            productname:req.body.productname,
+        const images = req.files.map(file => ({ filename: file.filename, data: file.buffer, type: file.mimetype }));
+
+        const editednewproduct = {
+            productname: req.body.productname,
             productprice: req.body.productprice,
             productdescription: req.body.productdescription,
             productstocks: req.body.productstocks,
             productcatagory: req.body.productcatagory,
-            productimage: req.file.filename,
+            productimage: images,
+        };
+
+        // Use findByIdAndUpdate and check the result
+        const newproduct = await Product.findByIdAndUpdate(id, editednewproduct);
+
+        if (!newproduct) {
+            // Handle the case where the product is not found
+            res.status(404).json({ message: "Product not found" });
+        } else {
+            console.log("Updated product:", newproduct);
+            res.redirect('/productmanagment');
         }
-        const newproduct= await Product.findByIdAndUpdate(id,editednewproduct);
-
-        if(!newproduct){
-            res.status(400)
-            throw new Error("There is no new file is found");
-        }
-
-        console.log("newproduct",newproduct);
-        res.redirect('/productmanagment');
-
-    }catch(error){
-        console.log(error)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
+};
 
-  }
 
 
 
   const categorymanagmentget=async(req,res)=>{
 
-    const allcatagory=await Catagory.find()
-res.render('catagorymanagment',{allcatagory:allcatagory});
+    const allcatagory=await Catagory.find();
+res.render('catagorymanagment',{allcatagory:allcatagory,message:req.session.message});
   }
 
   const addcatagory=async(req,res)=>{
+
+    const catagoryname = await Catagory.findOne({ catagoryname: req.body.catagoryname });
+    if (catagoryname) {
+      const allcatagory=await Catagory.find()
+      req.session.message="catagory name already exits"
+   return res.redirect('/catagorymanagment')
+    }
       const newcatagory={
         catagoryname:req.body.catagoryname,
         catagorydescription:req.body.catagorydescription
@@ -237,7 +262,7 @@ res.render('catagorymanagment',{allcatagory:allcatagory});
       console.log("newcatagory",newcatagory)
       const catagorydata=await Catagory.insertMany([ newcatagory]);
       console.log(catagorydata)
-      res.redirect('/catagorymanagment');
+     return res.redirect('/catagorymanagment');
   }
 
   const editcatagory = async (req, res) => {
@@ -269,35 +294,21 @@ res.render('catagorymanagment',{allcatagory:allcatagory});
     }
 }
 
-const orderManagnment=async(req,res)=>{
+const orderManagnment = async (req, res) => {
     try {
-            const orders = await Order.find();
-            const allProducts = [];
+        const orders = await Order.find().populate('products.productId');
+        const products = orders.map(order => order.products.map(product => product.productId));
 
-            orders.forEach(order => {
-                order.products.forEach(product => {
-                    const productInfo = {
-                        orderId: order._id,
-                        productName: product.productName,
-                        quantity: product.quantity,
-                        price: product.price,
-                        imageUrl: product.imageUrl,
-                        customerName:order.customerName,
-                        totalPrice:order.totalPrice,
-                        orderDate:order.orderDate,
-                        orderStatus:order.status
-                    };
-                    allProducts.push(productInfo);
-                });
-            });
+        console.log("products", products);
 
-            console.log("allProducts",allProducts)
-            res.render('ordermanagment',{allProducts:allProducts,orders:orders});
+        res.render('ordermanagment', { orders: orders,products:products});
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        // Handle the error and send an appropriate response
+        res.status(500).send('Internal Server Error');
     }
-
 }
+
 
 const statusUpdate=async(req,res)=>{
     const orderId=req.params.orderid

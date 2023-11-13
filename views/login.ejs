@@ -1,193 +1,121 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beautiful Template</title>
-    <style>
-        /* Reset default styles */
-        body, h1, p {
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Set background color and fonts */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
-
-        /* Create a header with background image */
-        header {
-            background-image: url('header-image.jpg');
-            background-size: cover;
-            text-align: center;
-            padding: 150px 0;
-            color: #fff;
-        }
-
-        h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        p {
-            font-size: 18px;
-        }
-
-        /* Create a navigation menu */
-        nav {
-            background-color: #333;
-            color: #fff;
-        }
-
-        ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            padding: 20px 0;
-        }
-
-        li {
-            margin: 0 20px;
-        }
-
-        a {
-            text-decoration: none;
-            color: #fff;
-            font-weight: bold;
-        }
-
-        /* Create a content section */
-        .content {
-            padding: 40px;
-            text-align: center;
-        }
-
-        /* Add media query for smaller screens */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 24px;
-            }
-
-            p {
-                font-size: 16px;
-            }
-
-            header {
-                padding: 100px 0;
-            }
-
-            .content {
-                padding: 20px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Welcome to Our Beautiful Website</h1>
-        <p>A simple, elegant, and responsive template</p>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-    </nav>
-    <div class="content">
-        <h1>About Us</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet vestibulum justo, eu fringilla neque.</p>
-    </div>
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Login</title>
-    <!-- Include Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Custom CSS -->
-<style>
-    .form{
-        display: flex;
-        justify-content: space-around;
-    }
+    <meta charset="utf-8">
+    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
 
-</style>
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
 
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="/admin/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/admin/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" >
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="admin/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="admin/css/style.css" rel="stylesheet">
 </head>
+
 <body>
-    <div class="container">
-        <div class="row justify-content-center align-items-center min-vh-100">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="text-center">User Login</h3>
-                    </div>
-                    <div class="card-body">
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sign In Start -->
+        <div class="container-fluid">
+            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                    <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <a href="index.html" class="">
+                                <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Bcart</h3>
+                            </a>
+                            <h3>Sign In</h3>
+                        </div>
                         <form action="/login" method="post" onsubmit="return validateform()">
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="email" name="email" >
+                                <label for="floatingInput">Email address</label>
                                 <span class="error" id="email-error"></span>
                             </div>
-                            <div class="form-group">
-                                <label for="password">Password:</label>
+                            <div class="form-floating mb-4">
                                 <input type="password" class="form-control" id="password" name="password" required>
+                                <label for="floatingPassword">Password</label>
                                 <span class="error" id="password-error"></span>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Login</button>
-                            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account?</p>
                             <p><%= message %></p>
+                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Login</button>
 
                         </form>
-                        <div class="form">
-                            <form action="/signup" method="get">
-                                <button class="btn btn-primary" type="submit">Signup</button>
-                               </form>
 
-                               <form action="/auth/google">
-                                <button  type="submit" class="btn btn-primary">sign in google</button>
-                               </form>
 
-                        </div>
+                        <p class="text-center mb-0">Don't have an Account? <a href="/signup">Sign Up</a></p>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Sign In End -->
     </div>
-    <script>
+ <!-- JavaScript Libraries -->
+ <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+ <script src="/admin/lib/chart/chart.min.js"></script>
+ <script src="/admin/lib/easing/easing.min.js"></script>
+ <script src="/admin/lib/waypoints/waypoints.min.js"></script>
+ <script src="/admin/lib/owlcarousel/owl.carousel.min.js"></script>
+ <script src="/admin/lib/tempusdominus/js/moment.min.js"></script>
+ <script src="/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+ <script src="/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-        function validateform(){
-            const email=document.getElementById("email").value
-        const password=document.getElementById("password").value
-        let isValid=true;
+ <!-- Template Javascript -->
+ <script src="/admin/js/main.js"></script>
+ <script>
 
-                    if (email.trim() === "" || !email.includes("@")) {
-                        document.getElementById("email-error").textContent = "plz provide an email";
-                        isValid = false;
-                    } else {
-                        document.getElementById("email-error").textContent = "";
-                    }
+    function validateform(){
+        const email=document.getElementById("email").value
+    const password=document.getElementById("password").value
+    let isValid=true;
 
-                    if (password.trim() === "" || password.length < 8) {
-                        document.getElementById("password-error").textContent = "Password must be at least 8 characters";
-                        isValid = false;
-                    } else {
-                        document.getElementById("password-error").textContent = "";
-                    }
-                    return isValid;
+                if (email.trim() === "" || !email.includes("@")) {
+                    document.getElementById("email-error").textContent = "plz provide an email";
+                    isValid = false;
+                } else {
+                    document.getElementById("email-error").textContent = "";
+                }
 
-        }
+                if (password.trim() === "" || password.length < 8) {
+                    document.getElementById("password-error").textContent = "Password must be at least 8 characters";
+                    isValid = false;
+                } else {
+                    document.getElementById("password-error").textContent = "";
+                }
+                return isValid;
 
-    
-    
+    }
+
+
+
 
 
 
@@ -196,16 +124,6 @@
 
 
 
-
-
-
-
-    <!-- Include Bootstrap JS (optional) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
 </body>
-</html>
 
+</html>
