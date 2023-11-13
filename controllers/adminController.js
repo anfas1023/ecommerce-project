@@ -206,10 +206,31 @@ const editproductpost = async (req, res) => {
     try {
         const id = req.params.id;
         console.log(id);
-        console.log(req.files)
-        if (!req.files) {
-            throw new Error("No file found");
+        console.log("req.files",req.files)
+        // if there is no images while uploadig
+        if (req.files.length===0) {
+            console.log("here");
+            const oldproduct=await Product.findById(id);
+            const{images}=oldproduct.productimage.map((image)=>{
+                return image.filename
+            })
+
+            console.log("images",images)
+
+           const editednewproduct = {
+                productname: req.body.productname,
+                productprice: req.body.productprice,
+                productdescription: req.body.productdescription,
+                productstocks: req.body.productstocks,
+                productcatagory: req.body.productcatagory,
+                productimage: images,
+            };
+
+            const newproduct = await Product.findByIdAndUpdate(id, editednewproduct);
+         return res.redirect('/productmanagment');
         }
+
+        // edit a prroduct
         const images = req.files.map(file => ({ filename: file.filename, data: file.buffer, type: file.mimetype }));
 
         const editednewproduct = {
@@ -222,14 +243,14 @@ const editproductpost = async (req, res) => {
         };
 
         // Use findByIdAndUpdate and check the result
-        const newproduct = await Product.findByIdAndUpdate(id, editednewproduct);
+        const newproduct = await Product.findByIdAndUpdate(id,editednewproduct);
 
         if (!newproduct) {
             // Handle the case where the product is not found
             res.status(404).json({ message: "Product not found" });
         } else {
             console.log("Updated product:", newproduct);
-            res.redirect('/productmanagment');
+          return res.redirect('/productmanagment');
         }
     } catch (error) {
         console.log(error);
@@ -239,21 +260,24 @@ const editproductpost = async (req, res) => {
 
 
 
-
+//   catagory managment
   const categorymanagmentget=async(req,res)=>{
 
     const allcatagory=await Catagory.find();
-res.render('catagorymanagment',{allcatagory:allcatagory,message:req.session.message});
+return res.render('catagorymanagment',{allcatagory:allcatagory,message:req.session.message});
   }
+//    add catagory
 
   const addcatagory=async(req,res)=>{
-
-    const catagoryname = await Catagory.findOne({ catagoryname: req.body.catagoryname });
+    const catagory = new RegExp(req.body.catagoryname, 'i');
+    const catagoryname = await Catagory.findOne({catagoryname:catagory});
+    console.log("catagoryname",catagoryname);
     if (catagoryname) {
-      const allcatagory=await Catagory.find()
-      req.session.message="catagory name already exits"
-   return res.redirect('/catagorymanagment')
+      return res.status(400).json("catagory name already exit");
     }
+
+    // const capital=catagory.toUpperCase
+
       const newcatagory={
         catagoryname:req.body.catagoryname,
         catagorydescription:req.body.catagorydescription
@@ -264,12 +288,19 @@ res.render('catagorymanagment',{allcatagory:allcatagory,message:req.session.mess
       console.log(catagorydata)
      return res.redirect('/catagorymanagment');
   }
-
+//     edit catagory
   const editcatagory = async (req, res) => {
     try {
         // const id = req.params.id;
         const id = req.body.catagoryid;
         console.log("id", id);
+
+        const catagory = new RegExp(req.body.catagoryname, 'i');
+        const catagoryname = await Catagory.findOne({catagoryname:catagory});
+        console.log("catagoryname",catagoryname);
+        if (catagoryname) {
+          return res.status(400).json("catagory name already exit");
+        }
 
         const updatedcatagory = {
             catagoryname: req.body.catagoryname,

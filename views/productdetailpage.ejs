@@ -23,6 +23,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             window.scrollTo(0, 1);
         }
     </script>
+    <style>
+        .product-images{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .productsimage{
+            margin-bottom: 20px;
+        }
+    </style>
   <link rel="stylesheet" href="/css/bootstrap.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -95,9 +105,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             <!-- product right -->
             <div class="left-ads-display wthree">
                 <div class="row">
-                    <div class="desc1-left col-md-6">
-                        <img src="/uploads/<%=singleproduct.productimage[0].filename %>" height="150px" width="150px" class="img-fluid" alt="">
-                    </div>
+                    <div class="desc1-left col-md-6 product-images">
+                    <% for( let i = 0; i < singleproduct.productimage.length; i++ ) { %>
+
+                            <img src="/uploads/<%=singleproduct.productimage[i].filename %>" height="150px" width="150px" class="img-fluid productsimage" alt="">
+                    <% } %>
+                </div>
+
                     <div class="desc1-right col-md-6 pl-lg-3">
                         <h3><%= singleproduct.productname %></h3>
                         <h5>Rs. <%= singleproduct.productprice %> <a href="#">Click for offer</a></h5>

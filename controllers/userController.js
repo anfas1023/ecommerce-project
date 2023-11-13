@@ -72,7 +72,7 @@ const signup=(req,res)=>{
 
         res.render('signup',{message:" "});
     }
-    
+
 
 }
 
@@ -147,7 +147,7 @@ const signup=(req,res)=>{
         res.render('otplogin',{message:" "});
 
     }
-    
+
  }
 
  const resendotp=async(req,res)=>{
@@ -204,7 +204,7 @@ const otppost = async (req, res) => {
 
 
 
-        console.log("user otp",user.otp,req.body.otp)
+        console.log("user otp",user.otp,req.body.otp);
 
 
 

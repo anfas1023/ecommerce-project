@@ -186,8 +186,8 @@
         </button>
       </div>
       <div class="modal-body">
-         <!-- Add user form goes here  -->
-        <form action="/addcatagory" method="post">
+         <!-- Add catagory form goes here  -->
+        <form>
           <div class="form-group">
             <label for="username">CategoryName</label>
             <input type="text" class="form-control" id="username" placeholder="Enter username" name="catagoryname">
@@ -211,15 +211,7 @@
 
 
   <!-- Content Start -->
-  <% if (message==="catagory name already exits") { %>
-    <script>
-     alert("name already exits")
-  </script>
 
-
-
-
-  <% } %>
 
 
 
@@ -302,11 +294,11 @@
         'Content-Type': 'application/json'
       }
     })
-    if(res.ok){
-      window.location.reload();
+    if(res.status===400){
+      alert("catagory name already exits")
     }
     else{
-      alert("some thing happend in your code bitch ");
+      window.location.reload();
 
     }
     
@@ -314,9 +306,35 @@
 
   // add catagory
 
-  // document.getElementById("Add").addEventListener("submit",()=>{
+  document.getElementById("Add").addEventListener("click",async(e)=>{
+    e.preventDefault();
+    console.log("here")
+    const catagoryname=document.getElementById("username");
+    const catagorydescription=document.getElementById("text");
 
-  // })
+    const addCategoryData = {
+      catagoryname:catagoryname.value,
+      catagorydescription: catagorydescription.value,
+    };
+
+    
+    const response = await fetch("/addcatagory", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(addCategoryData),
+    });
+
+    if(response.status===400){
+      alert("Catagory name already exit");
+    }else{
+      window.location.reload();
+    }
+
+
+
+  })
 
 
   function showToast() {
