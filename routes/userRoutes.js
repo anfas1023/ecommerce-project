@@ -28,6 +28,9 @@ const { loginuser,
     ordersucessfull,
     ordertrackingdetail,
     cancelOrder,
+    catagoryLaptop,
+    catagoryPrinters,
+    filiterPrice,
 }=require('../controllers/userController')
 
 require('../middlewares/GoogleAuth')(passport)
@@ -63,6 +66,7 @@ router.post('/decrementquantity/:userid/:productid/:quantity',decrementquantity)
 router.get('/products',productlist);
 router.get('/productdetail/:id',productDetail);
 
+
 router.get('/userprofile',userProfile);
 router.get('/userprofileedit',userprofileEdit);
 
@@ -81,7 +85,15 @@ router.get('/ordertracking', ordertrackingdetail);
 router.post('/cancelorder/:id',cancelOrder)
 
 
+// productfiliter using catagory
 
+router.get('/catagorylaptop', catagoryLaptop);
+router.get('/catagoryprinters',catagoryPrinters)
+
+
+// by price
+
+router.post('/filiters',filiterPrice)
 
 
 

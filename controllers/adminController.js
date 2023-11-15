@@ -207,6 +207,7 @@ const editproductpost = async (req, res) => {
         const id = req.params.id;
         console.log(id);
         console.log("req.files",req.files)
+
         // if there is no images while uploadig
         if (req.files.length===0) {
             console.log("here");

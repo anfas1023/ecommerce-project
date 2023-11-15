@@ -15,6 +15,11 @@ const transporter=nodemailer.createTransport({
         pass:"pmal xgtb micc hrwo"
     }
 });
+const Razorpay = require('razorpay');
+const razorpay = new Razorpay({
+    key_id: process.env.RAZOR_PAY_ID,
+    key_secret:  process.env.RAZOR_KEY_SECRET,
+  });
 
 
 const loginuser=(req,res)=>{
@@ -425,7 +430,7 @@ const decrementquantity=async(req,res)=>{
       });
 
       if(!updatedUser){
-        throw new Error("no updateuser")
+        throw new Error("no updateuser");
       }
 
       res.redirect('/cart');
@@ -459,6 +464,109 @@ const productlist = async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
 };
+
+// product filiter By ccatagory
+
+const catagoryLaptop=async(req,res)=>{
+    const catagory=req.query.catagory
+    console.log(catagory)
+
+    const page = parseInt(req.query.page) || 2;
+    const limit = parseInt(req.query.limit) || 6;
+    const skip = (page - 1) * limit;
+
+    const paginatedProducts = await Product.aggregate([
+        {
+            $match:{
+                productcatagory:catagory
+            }
+        },
+        {
+            $project:{
+                productname:1,
+                productprice:1,
+                productimage:1,
+            }
+        },
+    ]);
+
+    const totalCount = paginatedProducts.length;
+    const totalPages = Math.ceil(totalCount / limit);
+    res.render('productlistgrid', { allproduct:paginatedProducts, totalPages:totalPages });
+
+}
+
+// product filiter catatgory printers
+
+const catagoryPrinters=async(req,res)=>{
+  const printers=req.query.catagory
+
+
+  const page = parseInt(req.query.page) || 2;
+  const limit = parseInt(req.query.limit) || 6;
+  const skip = (page - 1) * limit;
+
+  const paginatedProducts=await Product.aggregate([
+    {
+        $match:{
+            productcatagory:printers
+        }
+    },
+    {
+        $project:{
+            productname:1,
+            productprice:1,
+            productimage:1,
+        }
+    },
+  ]);
+
+  const totalCount = paginatedProducts.length;
+  const totalPages = Math.ceil(totalCount / limit);
+  res.render('productlistgrid', { allproduct:paginatedProducts, totalPages:totalPages });
+}
+
+
+//  product filiter By price
+
+const filiterPrice = async (req, res) => {
+    try {
+        if(req.session.userId){
+            const selectedvalue = parseInt(req.body.flexRadioDefault);
+            console.log("req.body",req.body);
+
+            if (selectedvalue) {
+                const ltevalue = selectedvalue + 10000;
+                console.log("selectedvalue", selectedvalue, ltevalue);
+
+                const productByPrice = await Product.find({
+                    productprice: { $gte: selectedvalue, $lte: ltevalue}
+                });
+
+
+                console.log("productByPrice", productByPrice);
+
+                const totalPages = 4;
+
+                res.render("productlistgrid", { allproduct: productByPrice, totalPages: totalPages });
+            } else {
+                res.json({ error: "Internal server error" });
+            }
+
+        }else{
+            res.redirect('/login')
+        }
+
+    } catch (error) {
+        console.error("Error:", error);
+        res.json({ error: "Internal server error" });
+    }
+};
+
+
+
+
+// productdetail page
 
 
 const productDetail=async(req,res)=>{
@@ -780,5 +888,8 @@ module.exports={
     ordersucessfull,
     ordertrackingdetail,
     cancelOrder,
+    catagoryLaptop,
+    catagoryPrinters,
+    filiterPrice,
 }
 
