@@ -17,7 +17,9 @@ const { adminget,
     addcatagory,
     editcatagory,
     orderManagnment,
-    statusUpdate
+    statusUpdate,
+    salesReport,
+    salesReportGet,
 
 }=require('../controllers/adminController')
 const upload=require('../middlewares/multer');
@@ -58,6 +60,9 @@ router.post('/editcatagory/:id',editcatagory);
 
 router.get('/orderManagnment',orderManagnment);
 router.post('/statusorder/:orderid/:selectedStatus',statusUpdate);
+
+router.get('/salesReport',salesReport);
+
 
 
 

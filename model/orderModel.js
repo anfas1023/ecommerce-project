@@ -20,7 +20,6 @@ const orderSchema = new mongoose.Schema({
     orderDate: {
         type: Date,
         default: Date.now,
-        required: true,
     },
     products: [orderProducts],
     totalPrice: {
@@ -33,6 +32,10 @@ const orderSchema = new mongoose.Schema({
         state: String,
         postalCode: String,
         country: String,
+    },
+    quantity:{
+        type:Number,
+        required:true,
     },
     status: {
         type:String,

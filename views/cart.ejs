@@ -285,16 +285,14 @@ console.log('quantity',quantity);
         const total=priceElement.getAttribute('product-price');
         const totalprice=document.getElementById('total-price');
         const realtotalprice=document.getElementById('real-total-price');
-        
-          const totalAmount=parseFloat(totalprice.textContent)
+      
+          const totalAmount=parseFloat(totalprice.textContent);
         totalprice.textContent=totalAmount+parseFloat(total);
         console.log('total',total,totalAmount);
 
        
         realtotalprice.textContent=totalAmount+parseFloat(total);
-        
-
-       
+            
 
      } else {
         console.log("Failed to update the quantity");

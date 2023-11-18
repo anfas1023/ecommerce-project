@@ -276,8 +276,8 @@
                 <div class="mb-3">
                   <label for="paymentMethod" class="form-label">Payment Method</label>
                   <select class="form-select" id="paymentMethod" name="paymentMethod">
-                      <option value="cash">Cash on Delivery</option>
-                      <option value="online">Online Payment</option>
+                      <option value="Cash on Delivery">Cash on Delivery</option>
+                      <option value="Razor Pay">Razor Pay</option>
                   </select>
               </div>
               <button type="button" id="button" class="btn btn-primary" >Purchase</button>
@@ -294,6 +294,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script> -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -348,7 +349,11 @@ fetch('/addaddress',{
 
 
 document.getElementById('button').addEventListener('click', (event) => {
-  const addressId = document.querySelector('input[name="flexRadioDefault"]:checked').getAttribute('data-address-id');
+
+  if(paymentMethod.value==="Cash on Delivery"){
+
+    const addressId = document.querySelector('input[name="flexRadioDefault"]:checked').getAttribute('data-address-id');
+  console.log("paymentMethod",paymentMethod.value)
   if (!addressId) {
     alert("Please select an address before proceeding.");
   } else {
@@ -369,7 +374,73 @@ document.getElementById('button').addEventListener('click', (event) => {
       console.log(error)
     })
   }
+    
+  }else if(paymentMethod.value==="Razor Pay"){
+
+    const addressId = document.querySelector('input[name="flexRadioDefault"]:checked').getAttribute('data-address-id');
+
+    if(!addressId){
+      alert("Please select an address before proceeding.");
+    }else{
+
+      console.log("Selected Address ID:",addressId );
+    fetch(`/razor/${addressId}`,{
+      method:'post'
+    }).then((res)=>{
+      if(!res.ok){
+        throw new Error("failed to fetch data");
+      }
+      return res.json();
+
+   
+     
+    }).then((paymentDetails)=>{
+      console.log("paymentDetails.amount",paymentDetails.razorpayOrder.id,paymentDetails.razorpayOrder.currency,paymentDetails)
+      const amount=parseInt(paymentDetails.razorpayOrder.amount)
+
+      const options = {
+                key: 'rzp_test_uFXpXdjicI7Qrg', // Replace with your Razorpay Key
+                amount:amount,
+                currency:paymentDetails.razorpayOrder.currency,
+                name: 'Bcart',
+                description: 'payment for your product',
+                order_id: paymentDetails.razorpayOrder.id,
+                handler: function (response) {
+                    // Handle success, you can send the payment ID to the server
+                    console.log('Payment successful!', response);
+                    alert("payment sucessfull")
+                    window.location.href = '/ordersucessfull';
+                },
+                prefill: {
+                    name: 'Anfas Muhammed',
+                    email: 'anfasmuhammed936@gmail.com',
+                    contact: '8590183325',
+                },
+                theme: {
+                    color: '#528FF0',
+                },
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+
+    }
+
+
+
+  }else{
+    alert("plz choose any method of payment")
+  }
+
+
+
 });
+
+
 
 
 

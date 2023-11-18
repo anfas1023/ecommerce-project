@@ -28,6 +28,10 @@
 
     <!-- Template Stylesheet -->
     <link href="admin/css/style.css" rel="stylesheet">
+
+    <!-- cropper js -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 </head>
 
 <body>
@@ -104,30 +108,66 @@
  <script src="/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
  <script src="/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
+
+
  <!-- Template Javascript -->
  <script src="/admin/js/main.js"></script>
  <script>
            
-const image=document.getElementById("image")
+// const image=document.getElementById("image")
        
-       image.addEventListener("change", () => {
-     const reader = new FileReader();
-     reader.onload = function (e) {
-         const parent = document.getElementById("parent");
-         const displayedImage = document.getElementById("newone"); 
+//        image.addEventListener("change", () => {
+//      const reader = new FileReader();
+//      reader.onload = function (e) {
+//          const parent = document.getElementById("parent");
+//          const displayedImage = document.getElementById("newone"); 
  
-         if (displayedImage) {
-             parent.removeChild(displayedImage); 
-         }
+//          if (displayedImage) {
+//              parent.removeChild(displayedImage); 
+//          }
  
-         const newImage = document.createElement("img");
-         newImage.src = e.target.result;
-         newImage.id ="newone"
-         parent.appendChild(newImage);
-     };
-     reader.readAsDataURL(image.files[0]);
- });
+//          const newImage = document.createElement("img");
+//          newImage.src = e.target.result;
+//          newImage.id ="newone"
+//          parent.appendChild(newImage);
+//      };
+//      reader.readAsDataURL(image.files[0]);
+//  });
 
+document.addEventListener("DOMContentLoaded", function () {
+            const image = document.getElementById("image");
+            const parent = document.getElementById("parent");
+
+            // Initialize Cropper.js
+            const cropper = new Cropper(image, {
+                aspectRatio: 1, // Set the aspect ratio as needed
+                viewMode: 1,    // Set the view mode as needed
+                background: false,
+                autoCropArea: 1,
+            });
+
+            image.addEventListener("change", () => {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const displayedImage = document.getElementById("newone");
+
+                    if (displayedImage) {
+                        parent.removeChild(displayedImage);
+                    }
+
+                    const newImage = document.createElement("img");
+                    newImage.src = e.target.result;
+                    newImage.id = "newone";
+                    parent.appendChild(newImage);
+
+                    // Set the new image as the Cropper.js source
+                    cropper.replace(newImage);
+                };
+
+                reader.readAsDataURL(image.files[0]);
+            });
+        });
 
 </script>
 </body>

@@ -114,6 +114,7 @@
                     <tbody>
                         <% orders.forEach(order => { %>
                             <% order.products.forEach(product => { %>
+                                <%= console.log("product",product) %>
 
 
                             <tr>
@@ -124,7 +125,7 @@
                               <option  value="Shipped">Shipped</option>
                               <option  value="Cancel">Cancel</option>
                           </select></td>
-                              <td class="text-dark"><%= product.productId.productname %></td>
+                              <!-- <td class="text-dark"><%= product.productId.productname %></td> -->
                             <td class="text-dark"><%= product.productId.productprice %></td>
                             <td class="text-dark"><%= order.customerName %></td>
                             <td class="text-dark"><%= order.totalPrice %></td>

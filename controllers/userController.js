@@ -5,6 +5,7 @@ const nodemailer=require("nodemailer")
 const otpgenerator=require("otp-generator")
 const bcrypt=require("bcrypt");
 const { session } = require('passport');
+const dotenv=require('dotenv').config();
 const transporter=nodemailer.createTransport({
     host:"smtp.gmail.com",
     service:"gmail",
@@ -15,12 +16,12 @@ const transporter=nodemailer.createTransport({
         pass:"pmal xgtb micc hrwo"
     }
 });
+
 const Razorpay = require('razorpay');
 const razorpay = new Razorpay({
     key_id: process.env.RAZOR_PAY_ID,
     key_secret:  process.env.RAZOR_KEY_SECRET,
-  });
-
+});
 
 const loginuser=(req,res)=>{
     if(req.session.userId){
@@ -722,10 +723,6 @@ const checkOutPageGet=async(req,res)=>{
         if (product.cartitems.length === 0) {
           return  res.redirect('/cart');
         }
-
-        console.log("address",user.address);
-        console.log("userproduct",product.cartitems);
-        console.log("product",product)
        return res.render('checkoutpage',{address:user.address,userproduct:product.cartitems,product:product});
 
     }else{
@@ -763,19 +760,23 @@ const orderManagnmentPost = async (req, res) => {
             if (!address) {
                 return res.status(404).json({ error: 'Address not found' });
             }
-            console.log("user",user)
+
 
             const orderProducts = user.cartitems.map((cartItem) => ({
                 productId: cartItem.productId._id
             }));
-            console.log("orderProductsss",orderProducts.productId);
+            const quantity = user.cartitems.map((cart) => {
+              return cart.quantity
+            });
+
+            console.log("quantity",parseInt(quantity))
+
 
             const totalPrice = user.totalPrice;
 
             const orderData = {
                 user: userId,
                 customerName: user.username,
-                orderDate: new Date(),
                 products: orderProducts,
                 totalPrice: totalPrice,
                 shippingAddress: {
@@ -785,6 +786,7 @@ const orderManagnmentPost = async (req, res) => {
                     pincode: address.pincode,
                     country: address.country,
                 },
+                quantity:parseInt(quantity),
                 status: 'Pending',
             };
 
@@ -804,7 +806,7 @@ const orderManagnmentPost = async (req, res) => {
 
                 );
 
-                console.log("cartDelete",cartDelete);
+                // console.log("cartDelete",cartDelete);
 
             res.json({order});
         } catch (error) {
@@ -816,7 +818,98 @@ const orderManagnmentPost = async (req, res) => {
     }
 };
 
-const ordersucessfull=(req,res)=>{
+// razor pay
+
+const orderManagnmentRazor = async (req, res) => {
+    if (req.session.userId) {
+        const userId = req.session.userId;
+        const addressId = req.params.addressId;
+        try {
+            const user = await User.findById(userId)
+                .populate('address')
+                .populate({
+                    path: 'cartitems.productId',
+                    model: 'Product'
+                });
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            const address = user.address.id(addressId);
+            if (!address) {
+                return res.status(404).json({ error: 'Address not found' });
+            }
+
+
+            const totalPrice = user.totalPrice;
+
+            const orderProducts = user.cartitems.map((cartItem) => ({
+                productId: cartItem.productId._id
+            }));
+
+            const quantity = user.cartitems.map((cart) => {
+                return cart.quantity
+              });
+
+            // Move this line after totalPrice is defined
+            const orderData = {
+                user: userId,
+                customerName: user.username,
+                products: orderProducts,  // Make sure orderProducts is defined
+                totalPrice: totalPrice,
+                shippingAddress: {
+                    street: address.street,
+                    city: address.city,
+                    state: address.state,
+                    pincode: address.pincode,
+                    country: address.country,
+                },
+                quantity:parseInt(quantity),
+                status: 'Pending',
+            };
+
+
+
+            const order = await Order.create(orderData);
+
+            const productId = user.cartitems.map((user) => {
+                return user.productId._id;
+            });
+
+
+            const cartDelete = await User.findByIdAndUpdate(userId,
+                {
+                    $pull: { 'cartitems': { 'productId': { $in: productId } } }
+                },
+                { new: true }
+
+            );
+
+            const options = {
+                amount: totalPrice * 100, // Razorpay expects amount in paisa
+                currency: 'INR',
+                receipt: order._id.toString(),
+                payment_capture: 1, // Automatically capture the payment when it's successful
+            };
+
+            const razorpayOrder = await razorpay.orders.create(options);
+
+
+
+            res.json({ razorpayOrder });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    } else {
+        res.redirect('/login');
+    }
+};
+
+
+const ordersucessfull=async(req,res)=>{
+    const order=await Order.find()
+    console.log("Ordersss",order.quantity)
     res.render('ordersucessfull');
 };
 
@@ -824,7 +917,7 @@ const ordersucessfull=(req,res)=>{
 const ordertrackingdetail = async (req, res) => {
     if (req.session.userId) {
         const userId = req.session.userId;
-        console.log('User ID:', userId);
+        // console.log('User ID:', userId);
         const orders = await Order.find({ user: userId }).populate('products.productId');
 
         // console.log('orders:', orders);
@@ -891,5 +984,5 @@ module.exports={
     catagoryLaptop,
     catagoryPrinters,
     filiterPrice,
+    orderManagnmentRazor,
 }
-

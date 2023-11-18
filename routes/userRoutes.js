@@ -31,6 +31,7 @@ const { loginuser,
     catagoryLaptop,
     catagoryPrinters,
     filiterPrice,
+    orderManagnmentRazor,
 }=require('../controllers/userController')
 
 require('../middlewares/GoogleAuth')(passport)
@@ -93,7 +94,9 @@ router.get('/catagoryprinters',catagoryPrinters)
 
 // by price
 
-router.post('/filiters',filiterPrice)
+router.post('/filiters',filiterPrice);
+
+router.post('/razor/:addressId',orderManagnmentRazor);
 
 
 
