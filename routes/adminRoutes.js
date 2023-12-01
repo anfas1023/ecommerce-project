@@ -20,6 +20,11 @@ const { adminget,
     statusUpdate,
     salesReport,
     salesReportGet,
+    couponManagment,
+    addcouponget,
+    addcouponpost,
+    couponToBlock,
+  couponToUnblock,
 
 }=require('../controllers/adminController')
 const upload=require('../middlewares/multer');
@@ -62,6 +67,14 @@ router.get('/orderManagnment',orderManagnment);
 router.post('/statusorder/:orderid/:selectedStatus',statusUpdate);
 
 router.get('/salesReport',salesReport);
+router.get('/couponManagment',couponManagment);
+
+router.get('/addcoupon',addcouponget)
+router.post('/addcoupon',addcouponpost);
+
+router.post('/couponblock/:id', couponToBlock);
+router.post('/couponunblock/:id', couponToUnblock);
+
 
 
 

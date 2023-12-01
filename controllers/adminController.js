@@ -4,7 +4,10 @@ const Catagory = require("../model/categoryManagment");
 const Order = require("../model/orderModel");
 const ExcelJS = require('exceljs');
 const fs = require('fs');
-const path=require('path')
+const path=require('path');
+const Coupon=require('../model/coupenManagment');
+const moment = require('moment');
+
 
 const adminget = (req, res) => {
   res.render("admin", { message: " " });
@@ -33,6 +36,7 @@ const admindashboard = async (req, res) => {
   try {
 
     // day
+   const salestype=req.query.salestype
 
     let lastSevenDays = [];
     let currentDate = new Date();
@@ -56,7 +60,7 @@ const admindashboard = async (req, res) => {
     console.log("orderperday",ordersPerDay);
     const labels = lastSevenDays;
     let data=[]
-    console.log('labelsteh',labels);
+    // console.log('labelsteh',labels);
 
     labels.forEach((label) => {
       const order = ordersPerDay.find((o) => o._id === label);
@@ -72,7 +76,7 @@ const admindashboard = async (req, res) => {
       return date.getDate();
      });
 
-     console.log("data",data,labelsWithoutYearAndMonth)
+    //  console.log("data",data,labelsWithoutYearAndMonth)
 
     //  day
 
@@ -111,12 +115,7 @@ orderPerMounth.forEach((order)=>{
   }
 })
 })
-// const monthAndYear = monthsOfCurrentYear.map(label => {
-//   const date = new Date(label);
-//   const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Zero-padding the month
-//   const year = date.getFullYear();
-//   return `${month}-${year}`;
-// });
+
 
 // console.log("mountdata",mountdata,monthsOfCurrentYear);
 
@@ -150,56 +149,104 @@ const orderPerYear=await Order.aggregate([
 const orderData=[];
 orderPerYear.forEach((order)=>{
   const year=allYears.filter((year)=>{
-    console.log(year,order._id)
     if(year===parseInt(order._id)){
       orderData.push(order.count)
     }else{
       orderData.push(0)
     }
   })
+});
+
+const totalOrder = await Order.aggregate([
+  {
+    $count: 'totalCount',
+  },
+]);
+
+const totalRevnue = await Order.aggregate([
+  {
+    $group:{
+      _id:null,
+      totalRevenue:{$sum:"$totalPrice"}
+    }
+  },
+]);
+
+const totalUser = await User.aggregate([
+  {
+    $count: 'totalUser',
+  },
+]);
+
+
+
+const totalorder=totalOrder.map((order)=>order.totalCount)
+const totalrevenue=totalRevnue.map((sum)=>sum.totalRevenue)
+const totaluser =totalUser .map((user)=>user.totalUser)
+
+// console.log("totalorder",totalOrder,totalorder,totalrevenue);
+
+const errorMessage = req.flash('error');
+console.log("errorMessage",errorMessage);
+
+// catagory wise sales
+
+const catagory=await Order.aggregate([
+  {
+    $lookup: {
+      from: "products",
+      localField: "products.productId",
+      foreignField: "_id",
+      as: "productData"
+    }
+  },
+  {$unwind:'$productData'},
+  {
+    $group:{
+    _id:'$productData.productcatagory',
+    count:{$sum:1}
+  }
+}
+
+]);
+
+catagoryType=[];
+catagoryCount=[];
+
+catagory.forEach((c)=>{
+  catagoryType.push(c._id)
+  catagoryCount.push(c.count)
 })
 
-// const order=await Order.aggregate([
-//   { $lookup:
-//     {
-//        from: "Product",
-//        localField: "products.productId",
-//        foreignField: "_id",
-//        as: "productData"
-//     }
-// }
-// ]);
-
-
+console.log("catagory",catagory,catagoryType,catagoryCount);
 
 
 
 
 // console.log("orderPerYear",orderPerYear,orderData);
-// console.log("lookup",order)
-    res.render("admindashboard", { labelsWithoutYearAndMonth,data,mountdata,monthsOfCurrentYear,orderData,allYears});
+// console.log("lookup",order);
+    res.render("admindashboard", { labelsWithoutYearAndMonth,data,mountdata,monthsOfCurrentYear,orderData,allYears,totalorder,totalrevenue,totaluser,errorMessage,salestype,catagoryType,catagoryCount});
   } catch (error) {
     console.error(error);
   }
 };
-const salesReportGet=async(req,res)=>{
-  res.render('salesreport')
-}
+// const salesReportGet=async(req,res)=>{
+//   res.render('salesreport')
+// }
 
 const salesReport = async (req, res) => {
   try {
-
-    const startDate=req.query.startDate
-    const endDate=req.query.endDate
-    console.log("start date",startDate,endDate)
+    const startDate = new Date(req.query.startDate);
+    const endDate = new Date(req.query.endDate);
+    // endDate.setHours(23, 59, 59, 999);
+    endDate.setDate(endDate.getDate() + 1);
+    console.log("start date",startDate,endDate);
 
     const order = await Order.aggregate([
 
       {
-        $match:{
-        orderDate:{$gte:startDate},
-        orderDate:{$lte:endDate}
-    
+        $match:{       
+        orderDate:{$gte:startDate,$lte:endDate},   
       }
     },
       {
@@ -212,13 +259,47 @@ const salesReport = async (req, res) => {
       },
       {
         $lookup: {
+          
           from: "users",
           localField: "user",
           foreignField: "_id",
           as: "userData"
         }
-      }
+      },
+      {
+        $unwind: "$productData",
+      },
+      {$project:
+      {
+        orderId:"$_id",
+       shippingAddress:{
+        city:"$shippingAddress.city",
+        street:"$shippingAddress.street",
+        state:"$shippingAddress.state",
+        country:"$shippingAddress.country",    
+       },
+        productDetail:{
+          productName:"$productData.productname",
+          price:"$productData.productprice",
+        },
+        totalPrice:1,
+        customerName:1,
+        quantity:1,
+        orderDate:1,
+        status:1,
+      },
+    }
     ]);
+
+    // console.log("order",order)
+
+    if (order.length === 0) {
+      console.log("here")
+      const errorMessage = "Please provide a valid date";
+      req.flash('error', errorMessage);
+      return res.redirect('/admindashboard');
+    }
+
 
 
     const workbook = new ExcelJS.Workbook();
@@ -226,25 +307,32 @@ const salesReport = async (req, res) => {
  
     // Add data to the worksheet
     worksheet.columns = [
-      { header: 'Productname', key: 'Productname', width: 20 },
-      { header: 'Custumername', key: 'Custumername', width: 10 },
-      { header: 'Street', key: 'Street', width: 15 },
-      { header: 'City', key: 'City', width: 15 },
-      { header: 'Country', key: 'Country', width: 15 },
-      { header: 'State', key: 'State', width: 15 },
-      { header: 'Status', key: 'Status', width: 15 },
-      { header: 'Totalprice', key: 'Totalprice', width: 15 },
-      { header: 'Orderdate', key: 'Orderdate', width: 15 },
-    ];
+      { header: 'Product Name', key: 'productDetail.productName', width: 20 },
+      { header: 'Customer Name', key: 'customerName', width: 18 },
+      { header: 'Street', key: 'shippingAddress.street', width: 15 },
+      { header: 'City', key: 'shippingAddress.city', width: 15 },
+      { header: 'Country', key: 'shippingAddress.country', width: 15 },
+      { header: 'State', key: 'shippingAddress.state', width: 15 },
+      { header: 'Status', key: 'status', width: 15 },
+      { header: 'Total Price', key: 'totalPrice', width: 15 },
+      { header: 'Order Date', key: 'orderDate', width: 15 },
+      { header: 'Quantity', key: 'quantity', width: 15 },
+    ]
  
-    const data = [
-      { name: 'John Doe', age: 25, city: 'New York' },
-      { name: 'Jane Smith', age: 30, city: 'London' },
-      // Add more data as needed
-    ];
- 
-    worksheet.addRows(data);
- 
+    order.forEach((orderItem) => {
+      worksheet.addRow({
+        'productDetail.productName': orderItem.productDetail.productName,
+        'customerName': orderItem.customerName,
+        'shippingAddress.street': orderItem.shippingAddress.street,
+        'shippingAddress.city': orderItem.shippingAddress.city,
+        'shippingAddress.country': orderItem.shippingAddress.country,
+        'shippingAddress.state': orderItem.shippingAddress.state,
+        'status': orderItem.status,
+        'totalPrice': orderItem.totalPrice,
+        'orderDate': orderItem.orderDate,
+        'quantity':orderItem.quantity,
+      });
+    });
     // Generate the Excel file and send it as a response
     workbook.xlsx.writeBuffer()
       .then(buffer => {
@@ -390,6 +478,7 @@ const addproduct = async (req, res) => {
       productdescription: req.body.productdescription,
       productstocks: req.body.productstocks,
       productcatagory: req.body.productcatagory,
+      productoffer:req.body.productoffer,
       productimage: images,
     };
     const addedproduct = await Product.insertMany([newproduct]);
@@ -454,6 +543,7 @@ const editproductpost = async (req, res) => {
         productdescription: req.body.productdescription,
         productstocks: req.body.productstocks,
         productcatagory: req.body.productcatagory,
+        productoffer:req.body.productoffer,
         productimage: images,
       };
 
@@ -595,6 +685,79 @@ const statusUpdate = async (req, res) => {
 
 // }
 
+const couponManagment=async(req,res)=>{
+  try{
+    const coupons=await Coupon.find()
+    return res.render('coupons',{coupons})
+  }catch(error){
+   return res.status(500).json({message:"cannot Get the Coupon page"})
+  }
+  
+}
+
+const addcouponget=(req,res)=>{
+ return res.render('addcoupon',{message:" "});
+}
+
+const addcouponpost= async(req,res)=>{
+  try{
+
+    const ExistingCoupon=await Coupon.findOne({couponCode:req.body.couponCode})
+    if(ExistingCoupon){
+      return res.render('addcoupon',{message:"Coupon Already Exits"})
+    }
+    // const formattedDate = moment(req.body.expirationDate).format('MM-YYYY-DD');
+    // console.log("formattedDate",formattedDate)
+   const newCoupon=new Coupon({
+    couponCode:req.body.couponCode,
+    discountAmount:req.body.discountAmount,
+    expirationDate:req.body.expirationDate,
+    minimumpurchase :req.body.minimumpurchase,
+   });
+   await newCoupon.save();
+
+   res.redirect('/couponManagment');
+
+  }catch(error){
+   res.status(500).json({message:"Cannot add Coupon Error Occured"})
+    console.log(error)
+  }
+
+}
+
+
+
+const couponToBlock = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const block = await Coupon.findByIdAndUpdate(id, {$set:{isBlocked:true}});
+    if (!block) {
+      res.status(400);
+      throw new Error("Coupon cannot to block");
+    }
+    console.log("block", block);
+   return  res.redirect('/couponManagment');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const couponToUnblock = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id)
+    const unBlock = await Coupon.findByIdAndUpdate(id, {$set:{isBlocked:false}});
+    console.log(unBlock)
+    if (!unBlock) {
+      res.status(400);
+      throw new Error("Coupon cannot been Unblock");
+    }
+    return  res.redirect('/couponManagment');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   adminget,
   adminpost,
@@ -615,5 +778,10 @@ module.exports = {
   orderManagnment,
   statusUpdate,
   salesReport,
-  salesReportGet,
+  couponManagment,
+  addcouponget,
+  addcouponpost,
+  couponToBlock,
+  couponToUnblock,
+
 };

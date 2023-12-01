@@ -7,6 +7,7 @@ const mongoDBconnection=require('./config/dbConnection')
 const dotenv=require('dotenv').config();
 const session = require('express-session');
 const errorhandllers=require('./middlewares/errorhandellingmiddleware');
+const flash = require('express-flash');
 
 
 mongoDBconnection();
@@ -38,8 +39,9 @@ const nocache = (req,res,next)=> {
 
 }
 
-app.use(nocache)
-app.use(errorhandllers)
+app.use(nocache);
+app.use(errorhandllers);
+app.use(flash());
 
 
 

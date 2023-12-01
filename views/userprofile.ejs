@@ -271,6 +271,8 @@ a.list-group-item, .list-group-item-action {
                             </div>
                         </a> <a class="list-group-item" href="/ordertracking">order Detail</a>
                         <a class="list-group-item" href="/addaddress">Addresses</a>
+                        <a class="list-group-item" href="/showaddress">Show Address</a>
+
                     </nav>
                 </div>
             </div>
@@ -305,7 +307,9 @@ a.list-group-item, .list-group-item-action {
                       </div>
                     </div>
                     <hr>
-
+                  <h5>Wallet Balance:<%=  walletbalance %></h5>
+                  </div>
+                </div>
 
     <div class="col-sm-12">
       <a href="/userprofileedit" class="btn btn-primary">Edit Profile</a>
@@ -317,5 +321,25 @@ a.list-group-item, .list-group-item-action {
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+<script>
+  document.getElementById('refral').addEventListener('click',()=>{
+const referralCode=document.getElementById('referralCode').value
+fetch('/referralCode',{
+  method:'post',
+  headers: {
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({referralCode})
+}).then((res)=>{
+if(res.ok){
+  return res.json()
+}
+}).then((data)=>{
+  if(data){
+    alert(data.message)
+  }
+})
+  })
+</script>
 </body>
 </html>

@@ -1,175 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <title>DarkPan - Bootstrap 5 Admin Template</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <style>
+        /* Reset default styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
 
-    <link href="img/favicon.ico" rel="icon">
+        /* Container for the product form */
+        .container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 20px;
+        }
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
+        /* Form styling */
+        h2 {
+            text-align: center;
+        }
 
-    <!-- Icon Font Stylesheet -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+        form {
+            display: flex;
+            flex-direction: column;
+        }
 
-    <!-- Libraries Stylesheet -->
-    <link href="/admin/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="/admin/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" >
+        label {
+            margin-bottom: 5px;
+        }
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="admin/css/bootstrap.min.css" rel="stylesheet">
+        input[type="text"],
+        input[type="number"],
+        input[type="tel"],
+        select {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
 
-    <!-- Template Stylesheet -->
-    <link href="admin/css/style.css" rel="stylesheet">
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
 
-    <!-- cropper js -->
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+        /* Media queries for responsiveness */
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
-    <div class="container-fluid position-relative d-flex p-0">
-        <!-- Spinner Start -->
-        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <!-- Spinner End -->
+    <div class="container">
+        <h2>Add Product</h2>
 
+        <form action="/addproduct" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
 
-        <!-- Sign Up Start -->
-        <div class="container-fluid">
-            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
-                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <a href="index.html" class="">
-                                <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Bcart</h3>
-                            </a>
-                            <h3>Add Product</h3>
-                        </div>
-                        <form action="/addproduct" method="POST" enctype="multipart/form-data">
-                        <div class="form-floating mb-3">
-                            <input type="text" id="username" name="productname" class="form-control" required>
-                            <label for="floatingText">ProductName</label>
-                            <span class="error" id="username-error"></span>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="number" id="email" name="productprice" class="form-control" required>
-                            <label for="floatingInput">ProductPrice</label>
-                            <span class="error" id="email-error"></span>
-                        </div>
-                        <div class="form-floating mb-4">
-                            <input type="text" id="description" name="productdescription" class="form-control" required>
-                            <label for="floatingPassword">Producrdescription</label>
-                            <span class="error" id="password-error"></span>
-                        </div>
-                        <div class="form-floating mb-4">
-                            <input type="text" id="stocks" name="productstocks" class="form-control" required>
-                            <label for="floatingPassword">ProductStocks</label>
-                            <span class="error" id="confirmpassword-error"></span>
-                        </div>
-                        <div class="form-floating mb-4">
-                            <select id="catagory" name="productcatagory">
-                                <option value="<%= categoryNames[0]  %>"><%= categoryNames[0]  %></option>
-                                <option value="<%= categoryNames[1]  %>"><%= categoryNames[1]  %></option>
-                        </div>
-                        <!-- Add an "id" attribute to the parent div for displaying the image -->
-                        <div id="parent">
-                            <label for="file">Productimage</label>
-                            <input type="file" id="image" name="filename" multiple required>
-                        </div>
-                        <p><%= message %></p>
-                        <button type="submit">Add product</button>
-                    </form>
-                    </div>
-                </div>
+            <!-- Product Name -->
+            <label for="productname">Product Name:</label>
+            <input type="text" id="productname" name="productname" required>
+
+            <!-- Product Price -->
+            <label for="productprice">Product Price:</label>
+            <input type="number" id="productprice" name="productprice" required>
+
+            <!-- Product Description -->
+            <label for="productdescription">Product Description:</label>
+            <input type="text" id="productdescription" name="productdescription" required>
+
+            <!-- Product Stocks -->
+            <label for="productstocks">Product Stocks:</label>
+            <input type="text" id="productstocks" name="productstocks" required>
+
+            <!-- Product Offer -->
+            <label for="productoffer">Product Offer:</label>
+            <input type="text" id="productoffer" name="productoffer">
+
+            <!-- Product Category -->
+            <label for="productcatagory">Product Category:</label>
+            <select id="productcatagory" name="productcatagory">
+                <option value="<%= categoryNames[0]  %>"><%= categoryNames[0]  %></option>
+                <option value="<%= categoryNames[1]  %>"><%= categoryNames[1]  %></option>
+
+                <!-- Add more options as needed -->
+            </select>
+
+            <!-- Product Image -->
+            <div>
+                <label for="productimages">Product Images:</label>
+                <input type="file" id="productimages" name="filename" multiple>
+                <div id="image-preview-container"></div>
             </div>
-        </div>
-        <!-- Sign Up End -->
+
+            <!-- Submit Button -->
+            <button type="submit">Add Product</button>
+        </form>
     </div>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
- <script src="/admin/lib/chart/chart.min.js"></script>
- <script src="/admin/lib/easing/easing.min.js"></script>
- <script src="/admin/lib/waypoints/waypoints.min.js"></script>
- <script src="/admin/lib/owlcarousel/owl.carousel.min.js"></script>
- <script src="/admin/lib/tempusdominus/js/moment.min.js"></script>
- <script src="/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
- <script src="/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
-
-
- <!-- Template Javascript -->
- <script src="/admin/js/main.js"></script>
- <script>
-           
-// const image=document.getElementById("image")
-       
-//        image.addEventListener("change", () => {
-//      const reader = new FileReader();
-//      reader.onload = function (e) {
-//          const parent = document.getElementById("parent");
-//          const displayedImage = document.getElementById("newone"); 
- 
-//          if (displayedImage) {
-//              parent.removeChild(displayedImage); 
-//          }
- 
-//          const newImage = document.createElement("img");
-//          newImage.src = e.target.result;
-//          newImage.id ="newone"
-//          parent.appendChild(newImage);
-//      };
-//      reader.readAsDataURL(image.files[0]);
-//  });
-
-document.addEventListener("DOMContentLoaded", function () {
-            const image = document.getElementById("image");
-            const parent = document.getElementById("parent");
-
-            // Initialize Cropper.js
-            const cropper = new Cropper(image, {
-                aspectRatio: 1, // Set the aspect ratio as needed
-                viewMode: 1,    // Set the view mode as needed
-                background: false,
-                autoCropArea: 1,
-            });
-
-            image.addEventListener("change", () => {
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    const displayedImage = document.getElementById("newone");
-
-                    if (displayedImage) {
-                        parent.removeChild(displayedImage);
-                    }
-
-                    const newImage = document.createElement("img");
-                    newImage.src = e.target.result;
-                    newImage.id = "newone";
-                    parent.appendChild(newImage);
-
-                    // Set the new image as the Cropper.js source
-                    cropper.replace(newImage);
-                };
-
-                reader.readAsDataURL(image.files[0]);
-            });
+  
+    <script>
+        document.getElementById('productimages').addEventListener('change', function(event) {
+            previewImages(event);
         });
+    
+        function previewImages(event) {
+            var input = event.target;
+            var container = document.getElementById('image-preview-container');
+    
+            // Clear previous images
+            container.innerHTML = '';
+    
+            for (var i = 0; i < input.files.length; i++) {
+                var reader = new FileReader();
+    
+                reader.onload = (function () {
+                    var file = input.files[i];
+                    return function (e) {
+                        var preview = document.createElement('img');
+                        preview.src = e.target.result;
+                        preview.classList.add('image-preview');
+                        container.appendChild(preview);
+                    };
+                })();
+    
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+    </script>
 
-</script>
+    <script>
+        
+    function validateForm() {
+        // Validate Product Name
+        var productName = document.getElementById('productname').value.trim();
+        if (productName === '') {
+            alert('Please enter a product name.');
+            return false;
+        }
+
+        // Validate Product Price
+        var productPrice = document.getElementById('productprice').value.trim();
+        if (productPrice === '' || isNaN(productPrice) || parseFloat(productPrice) <= 0) {
+            alert('Please enter a valid product price.');
+            return false;
+        }
+
+        // Validate Product Description
+        var productDescription = document.getElementById('productdescription').value.trim();
+        if (productDescription === '') {
+            alert('Please enter a product description.');
+            return false;
+        }
+
+        // Validate Product Stocks
+        var productStocks = document.getElementById('productstocks').value.trim();
+        if (productStocks === '' || isNaN(productStocks) || parseInt(productStocks) < 0) {
+            alert('Please enter a valid product stock quantity.');
+            return false;
+        }
+
+        // Additional validations for other fields can be added here
+
+        // If all validations pass, the form will be submitted
+        return true;
+    }
+        </script>
+    
+    
 </body>
-
 </html>

@@ -21,6 +21,9 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    productoffer:{
+        type:Number,
+    },
     productimage:[
         {
             filename: String,

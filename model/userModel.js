@@ -51,8 +51,16 @@ const userSchema=new mongoose.Schema({
         type:Boolean,
         default:false,
     },
+    isVerified:{
+      type:Boolean,
+      default:false,
+    },
     blockedBy:[{type:mongoose.Schema.Types.ObjectId,ref:'User'}]
     ,
+
+    referralCode:{
+     type:String,
+    },
 
     address:[addressSchema],
 

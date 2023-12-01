@@ -114,7 +114,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
                     <div class="desc1-right col-md-6 pl-lg-3">
                         <h3><%= singleproduct.productname %></h3>
-                        <h5>Rs. <%= singleproduct.productprice %> <a href="#">Click for offer</a></h5>
+                        <h5 style="text-decoration: line-through;">Rs. <%= singleproduct.productprice %> </h5>
+                       <h5>Rs.<%= singleproduct.productprice-singleproduct.productoffer %></h5>
                         <div class="available mt-3">
 
 

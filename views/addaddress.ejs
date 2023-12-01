@@ -284,7 +284,7 @@ a.list-group-item, .list-group-item-action {
                         <h5 class="mb-0">Billing details</h5>
                     </div>
                     <div class="card-body">
-                        <form action="/addaddress" method="post">
+                        <form action="/addaddress" method="post" onsubmit="return validateForm()">
                             <!-- Text input for First Name -->
                             <div class="mb-3">
                                 <label for="Street" class="form-label">Street</label>
@@ -306,7 +306,8 @@ a.list-group-item, .list-group-item-action {
                             <!-- Text input for Address -->
                             <div class="mb-3">
                                 <label for="Pincode" class="form-label"> Pincode</label>
-                                <input type="text" class="form-control" id="address" name="pincode">
+                                <input type="text" class="form-control" id="pincode" name="pincode" required >
+                                <small class="form-text text-muted" id="pincodeHelp"></small>
                             </div>
 
                             <!-- Email input -->
@@ -329,6 +330,26 @@ a.list-group-item, .list-group-item-action {
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+
+<script>
+    function validateForm() {
+        // Validate Pincode
+        const pincodeInput = document.getElementById('pincode');
+        const pincodeHelp = document.getElementById('pincodeHelp');
+        const pincodePattern = /^[0-9]{6}$/;
+
+        if (!pincodePattern.test(pincodeInput.value)) {
+            pincodeHelp.innerText = 'Please enter a valid 6-digit pincode.';
+            return false;
+        } else {
+            pincodeHelp.innerText = '';
+        }
+
+        // You can add more validation logic here if needed
+
+        return true;
+    }
+</script>
 
 </body>
 </html>

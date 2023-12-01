@@ -102,50 +102,7 @@
               <div class="card shadow-0 border">
                 <div class="p-4">
                   <h5 class="card-title mb-3">Add Address</h5>
-                  <!-- <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
 
-                  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <form id="form-data">
-                            <div class="mb-3">
-                              <label for="Street" class="form-label">Street</label>
-                              <input type="text" class="form-control" id="street" name="street">
-                            </div>
-                            <div class="mb-3">
-                              <label for="city" class="form-label">City</label>
-                              <input type="text" class="form-control" id="city" name="city">
-                            </div>
-                            <div class="mb-3">
-                              <label for="State" class="form-label">State</label>
-                              <input type="text" class="form-control" id="state" name="state">
-                            </div>
-                            <div class="mb-3">
-                              <label for="Pincode" class="form-label"> Pincode</label>
-                              <input type="text" class="form-control" id="pincode" name="pincode">
-                            </div>
-                            <div class="mb-3">
-                              <label for="Country" class="form-label">Country</label>
-                              <input type="text" class="form-control" id="country" name="country">
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-primary">Send message</button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
-
-                  <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
   Add Address
 </button>
@@ -162,7 +119,7 @@
       </div>
       <div class="modal-body">
 
-        <form id="form-data">
+        <form id="form-data" onsubmit="return validateModalForm()">
           <div class="mb-3">
             <label for="Street" class="form-label">Street</label>
             <input type="text" class="form-control" id="street" name="street">
@@ -194,9 +151,7 @@
   </div>
 </div>
 
-
-
-                  <hr class="my-4" />
+                  <hr class="my-4">
 
                   <h5 class="card-title mb-3"> Address</h5>
                   <% for( let i = 0; i < address.length; i++ ) { %>
@@ -214,6 +169,7 @@
                                         Country: <%= address[i].country %> <br>
                                         Pincode:<%= address[i].pincode  %> <br>
                                 </label>
+                             
                               </div>
                             </div>
 
@@ -238,22 +194,22 @@
                   <p class="mb-2"><%= product.totalPrice  %></p>
                 </div>
                 <div class="d-flex justify-content-between">
-                  <p class="mb-2">Discount:</p>
-                  <p class="mb-2 text-danger">- $60.00</p>
+                  <p class="mb-2">Coupon Discount:</p>
+                  <p id="Discount" class="mb-2 text-danger">0</p>
                 </div>
-                <div class="d-flex justify-content-between">
+                <!-- <div class="d-flex justify-content-between">
                   <p class="mb-2">Shipping cost:</p>
                   <p class="mb-2">+ $14.00</p>
-                </div>
+                </div> -->
                 <hr />
                 <div class="d-flex justify-content-between">
                   <p class="mb-2">Total price:</p>
-                  <p class="mb-2 fw-bold"><%= product.totalPrice  %></p>
+                  <p id="totalPrice" class="mb-2 fw-bold"><%= product.totalPrice  %></p>
                 </div>
 
                 <div class="input-group mt-3 mb-4">
-                  <input type="text" class="form-control border" name="" placeholder="Promo code" />
-                  <button class="btn btn-light text-primary border">Apply</button>
+                  <input type="text" id="couponCode" class="form-control border" name="couponCode" placeholder="Promo code" >
+                  <button type="submit" id="coupon" class="btn btn-light text-primary border">Apply</button>
                 </div>
 
                 <hr />
@@ -278,7 +234,9 @@
                   <select class="form-select" id="paymentMethod" name="paymentMethod">
                       <option value="Cash on Delivery">Cash on Delivery</option>
                       <option value="Razor Pay">Razor Pay</option>
+                      <option value="Wallet Payment">Wallet Payment</option>
                   </select>
+
               </div>
               <button type="button" id="button" class="btn btn-primary" >Purchase</button>
               </div>
@@ -300,52 +258,78 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Using Moment.js from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+
+
+
     <script>
 
-document.getElementById('form-data').addEventListener('submit',(event)=>{
+document.getElementById('form-data').addEventListener('submit', async (event) => {
   event.preventDefault();
 
   const street = document.getElementById('street').value;
-            const city = document.getElementById('city').value;
-            const state = document.getElementById('state').value;
-            const pincode = document.getElementById('pincode').value;
-            const country = document.getElementById('country').value;
+  const city = document.getElementById('city').value;
+  const state = document.getElementById('state').value;
+  const pincode = document.getElementById('pincode').value;
+  const country = document.getElementById('country').value;
+
+  if (street.trim() === '') {
+            alert('Street cannot be empty');
+            return false;
+        }
+
+        // Example: Check if Pincode is a valid 6-digit number
+        const pincodePattern = /^[0-9]{6}$/;
+        if (!pincodePattern.test(pincode)) {
+            alert('Please enter a valid 6-digit pincode');
+            return false;
+        }
 
 
-const data={
-  street:street,
-  city:city,
-  state:state,
-  pincode:pincode,
-  country:country
-}
+  const data = {
+    street: street,
+    city: city,
+    state: state,
+    pincode: pincode,
+    country: country
+  };
 
-fetch('/addaddress',{
-  method:'post',
-  body:JSON.stringify(data),
-  headers: {
+  try {
+    const response = await fetch('/addaddress', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
         'Content-Type': 'application/json'
       }
+    });
 
-}).then((response)=>{
-  if(response.ok){
-    window.location.reload();
-    console.log("sucess");
+    if (response.ok) {
+      // Reload the page or perform any other necessary actions on success
+      window.location.reload();
+      console.log('Success');
+    } else {
+      // Handle non-successful response (e.g., display an error message)
+      console.error('Failed to add address');
+    }
+  } catch (error) {
+    // Handle fetch errors (e.g., network issues)
+    console.error('Error during fetch:', error);
   }
-})
-.catch((error)=>{
-  console.log("error");
-  console.log(error);
-})
+});
 
-})
+
 
 
  const paymentMethod=document.getElementById('paymentMethod');
  if(!paymentMethod){
   alert("plz select a payment method");
  }
+</script>
 
+<script>
 
 
 document.getElementById('button').addEventListener('click', (event) => {
@@ -360,8 +344,15 @@ document.getElementById('button').addEventListener('click', (event) => {
     // Do something with the selectedAddressId, e.g., send it to your server for processing.
 
     console.log("Selected Address ID:",addressId );
+
+   const couponValueApply=document.getElementById('totalPrice').textContent
+
     fetch(`/addorder/${addressId}`,{
-      method:'post'
+      method:'post',
+      headers: {
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({couponValueApply})
     }).then((res)=>{
       if(res.ok){
         window.location.href='/ordersucessfull'
@@ -376,16 +367,22 @@ document.getElementById('button').addEventListener('click', (event) => {
   }
     
   }else if(paymentMethod.value==="Razor Pay"){
+    console.log('razorpay');
 
     const addressId = document.querySelector('input[name="flexRadioDefault"]:checked').getAttribute('data-address-id');
+  
 
     if(!addressId){
       alert("Please select an address before proceeding.");
     }else{
-
+      const couponValueApply=document.getElementById('totalPrice').textContent
       console.log("Selected Address ID:",addressId );
     fetch(`/razor/${addressId}`,{
-      method:'post'
+      method:'post',
+      headers: {
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({couponValueApply})
     }).then((res)=>{
       if(!res.ok){
         throw new Error("failed to fetch data");
@@ -429,9 +426,44 @@ document.getElementById('button').addEventListener('click', (event) => {
     })
 
     }
+  }else if(paymentMethod.value==="Wallet Payment"){
+    const addressId = document.querySelector('input[name="flexRadioDefault"]:checked').getAttribute('data-address-id');
+    if(!addressId){
+      alert("plz select an address")
+    }
+
+    const couponValueApply=document.getElementById('totalPrice').textContent
+
+    fetch(`walletpayment/${addressId}`,{
+      method:'post',
+      headers: {
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({couponValueApply})
+    }).then((res)=>{
+      if(res.ok){
+return res.json()
+      }else{
+        alert("res is not okkay...")
+      }
+    })
+    .then((data)=>{
+    if(data.message){
+      alert(data.message)
+    }else{
+      window.location.href = '/ordersucessfull';
+    }
+
+  
+
+      
+    }).
+    catch((error)=>{
+      console.log("erroor",error)
+    })
 
 
-
+  
   }else{
     alert("plz choose any method of payment")
   }
@@ -443,13 +475,68 @@ document.getElementById('button').addEventListener('click', (event) => {
 
 
 
-
-
-
-
-
-
 </script>
+
+
+<script>
+  document.getElementById('coupon').addEventListener('click', async (event) => {
+    // event.currentTarget.disabled = true;
+   event.preventDefault()
+    const couponCode = document.getElementById('couponCode').value;
+
+    const couponValue = {
+      couponCode: couponCode
+    };
+    console.log("adfg",couponCode);
+
+    try {
+      const response = await fetch('/redeemCoupon', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(couponValue)
+      });
+
+      if (response.ok) {
+        const {discountAmount,minimumpurchase,expirationDate,message} = await response.json();
+        if(message){
+         return alert(message)
+        }
+        console.log("sucess");
+        const Discount=document.getElementById('Discount');
+        const totalPrice=document.getElementById('totalPrice');
+        const min=parseInt(totalPrice.textContent);
+        console.log(parseInt(min),parseInt(minimumpurchase))
+
+
+        if (parseInt(min) > parseInt(minimumpurchase)) {
+  // Get the current date
+  const currentDate = new Date();  
+  // Convert the expiration date string to a Date object
+  const formattedDate = new Date(expirationDate);
+  console.log("date",currentDate,formattedDate,expirationDate);
+  if (currentDate < formattedDate) {
+    // Replace with the actual expiration date
+    Discount.textContent = parseInt(discountAmount);
+    totalPrice.textContent = totalPrice.textContent - parseInt(discountAmount);
+   return alert('Coupon applied sucessfully');
+  } else {
+    return alert('Coupon expired');
+  }
+} else {
+return  alert(`You want to purchase ${minimumpurchase}`);
+}
+
+      } else {
+        console.error('Failed to redeem the coupon');
+      }
+    } catch (error) {
+      console.error('Error during coupon redemption:', error);
+    }
+  });
+</script>
+
 
 </body>
 </html>

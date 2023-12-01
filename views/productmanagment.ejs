@@ -80,6 +80,13 @@
                     <a href="/orderManagnment" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Order</a>
                     <a href="/catagoryManagment" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Catagory</a>
                     <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Coupons</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/couponManagment" class="dropdown-item">Coupons View</a>
+                            <a href="/addcoupon" class="dropdown-item">Add Coupons</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="signin.html" class="dropdown-item">Sign In</a>
@@ -114,20 +121,27 @@
                     <tbody>
                         <% allproduct.forEach(product => { %>
 
-                            <% console.log('product',product.productimage[0].filename); %>
                          <tr>
                             <th scope="row" class="text-dark"><%= product.productname %></th>
                             <td class="text-dark"><%= product.productdescription %></td>
                             <td class="text-dark"><%= product.productprice %></td>
                             <td class="text-dark"><%= product.productstocks %></td>
                             <td class="text-dark"><%= product.productcatagory %></td>
+
                             <td>
                                 <!-- Edit User Button -->
                                 <a href="/editproduct/<%= product._id %>" class="btn btn-primary">Edit</a>
                             </td>
                             <td>
-                                <img height="50px" width="50px" src="/uploads/<%= product.productimage[0].filename %>" alt="">
-
+                                <td>
+                                    <% if (product.productimage && product.productimage.length > 0 && product.productimage[0].filename) { %>
+                                        <%= console.log(product.productimage[0].filename) %>
+                                        <img height="50px" width="50px" src="/uploads/<%= product.productimage[0].filename %>" alt="">
+                                    <% } else { %>
+                                        <span>No Image</span>
+                                    <% } %>
+                                </td>
+                                
                             </td>
 
 

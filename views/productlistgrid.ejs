@@ -79,9 +79,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     <!-- //nav -->
                     <div class="search-form ml-auto">
                         <div class="form-w3layouts-grid">
-                            <form action="#" method="post" class="newsletter">
-                                <input class="search" type="search" placeholder="Search here..." required="">
-                                <button class="form-control btn" value=""><span class="fa fa-search"></span></button>
+                            <form action="/search" method="post" class="newsletter">
+                                <input class="search" type="search" name="search" placeholder="Search here..." required="">
+                                <button type="submit" class="form-control btn" value="">Search<span class="fa fa-search"></span></button>
 
                             </form>
                         </div>
@@ -151,6 +151,19 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
       </form>
 
+      <hr>
+      <h5>Sort Price by Low to high</h5>
+
+      <form action="/sort" method="post">
+        <div class="mb-3">
+            <label for="sortOrder" class="form-label">Sort Order</label>
+            <select class="form-select" id="sortOrder" name="sortOrder">
+                <option value="asc">Low to High</option>
+                <option value="desc">High to Low</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Apply Sort By Price</button>
+      </form>
 
 
     </div>
