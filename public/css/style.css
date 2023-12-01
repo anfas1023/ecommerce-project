@@ -77,7 +77,7 @@ ol {
 }
 
 .top-w3pvt {
-    border-bottom: 1px solid #8bb4df;
+    border-bottom: 1px solid #000000;
     padding-bottom: 0.5em;
 }
 
@@ -178,7 +178,7 @@ nav {
     display: block;
     font-size: 0.3em;
     margin: 0;
-    color: #5b7a9a;
+    color: #000000;
     letter-spacing: 4px;
     font-weight: 600;
     text-shadow: 3px 1px 3px rgba(78, 73, 73, 0.21);
@@ -303,7 +303,7 @@ li > a:only-child:after {
 		float: none;
 	} */
     .menu li.active a {
-        color: #3369e7;
+        color: #7a7c80;
     }
 
     nav {
@@ -479,13 +479,13 @@ li > a:only-child:after {
 
 /*--banner--*/
 .main-sec {
-    background: #74d2e7;
+    background: #000000;
     min-height: 43em;
     position: relative;
 }
 
 .main-sec.inner-page {
-    background: #74d2e7;
+    background: rgb(0, 0, 0);
     min-height: 20em;
     position: relative;
 }

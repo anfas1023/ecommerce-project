@@ -1,159 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Navbar</title>
-    <style>
-        /* Basic styles for the navbar */
-        .navbar {
-            background-color: #333;
-            overflow: hidden;
-        }
+    <meta charset="utf-8">
+    <title>Admin</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
 
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
 
-        /* Styles for the mobile menu */
-        .navbar .icon {
-            display: none;
-            float: right;
-            cursor: pointer;
-        }
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-        @media screen and (max-width: 600px) {
-            .navbar a:not(:first-child) {
-                display: none;
-            }
+    <!-- Libraries Stylesheet -->
+    <link href="/admin/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/admin/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
-            .navbar a.icon {
-                float: right;
-                display: block;
-            }
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="admin/css/bootstrap.min.css" rel="stylesheet">
 
-            .navbar.responsive a.icon {
-                position: absolute;
-                top: 0;
-                right: 0;
-            }
-
-            .navbar.responsive a {
-                float: none;
-                display: block;
-                text-align: left;
-            }
-        }
-    </style>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Template Stylesheet -->
+    <link href="admin/css/style.css" rel="stylesheet">
 </head>
+
 <body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
 
 
-
-
-
-    <% if (newuser) { %>
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% alluser.forEach(user => { %>
-                    <tr>
-                        <td><%= user._id %></td>
-                        <td><%= user.username %></td>
-                        <td><%= user.email %></td>
-                        <td><%= user.phone %></td>
-                        <td>
-                            <!-- Edit User Button -->
-                            <a href="/edituser/<%= user._id %>" class="btn btn-primary">Edit</a>
-
-                            <!-- Block/Unblock Buttons -->
-                            <% if (user.isBlocked) { %>
-                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#unblockModal<%= user._id %>">Unblock</button>
-                            <% } else { %>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#blockModal<%= user._id %>">Block</button>
-                            <% } %>
-                        </td>
-                    </tr>
-                    <!-- Unblock Modal -->
-                    <div class="modal fade" id="unblockModal<%= user._id %>" tabindex="-1" role="dialog" aria-labelledby="unblockModalLabel<%= user._id %>" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="unblockModalLabel<%= user._id %>">Unblock User</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Are you want Unblock</p>
-                                  </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <a href="/unblock/<%= user._id %>" class="btn btn-success">Unblock</a>
-                                </div>
-                            </div>
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-secondary navbar-dark">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>User</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">Anfas</h6>
+                        <span>Admin</span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="/admindashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="button.html" class="dropdown-item">Buttons</a>
+                            <a href="typography.html" class="dropdown-item">Typography</a>
+                            <a href="element.html" class="dropdown-item">Other Elements</a>
                         </div>
                     </div>
-                    <!-- Block Modal -->
-                    <div class="modal fade" id="blockModal<%= user._id %>" tabindex="-1" role="dialog" aria-labelledby="blockModalLabel<%= user._id %>" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="blockModalLabel<%= user._id %>">Block User</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                   <p>Are you want to Block</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <a href="/block/<%= user._id %>" class="btn btn-danger">Block</a>
-                                </div>
-                            </div>
+                    <a href="/usermanagment" class="nav-item nav-link"><i class="fa fa-th me-2"></i>User</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>product</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/productmanagment" class="dropdown-item">Product View</a>
+                            <a href="/addproductget" class="dropdown-item">Add product</a>
                         </div>
                     </div>
-                <% }) %>
-            </tbody>
-        </table>
-    <% } %>
+                    <a href="/orderManagnment" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Order</a>
+                    <a href="/catagoryManagment" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Catagory</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="signin.html" class="dropdown-item">Sign In</a>
+                            <a href="signup.html" class="dropdown-item">Sign Up</a>
+                            <a href="404.html" class="dropdown-item">404 Error</a>
+                            <a href="blank.html" class="dropdown-item">Blank Page</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+
+        <div class="col-sm-12 col-xl-6 container mt-5 bg-white ">
+            <div class="bg-secondary rounded h-100 p-4 bg-white ">
+                <h6 class="mb-4 text-dark">User Managment</h6>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-dark">username</th>
+                            <th scope="col"  class="text-dark" >Email</th>
+                            <th scope="col"  class="text-dark">Mobile</th>
+                            <th scope="col"  class="text-dark">Action</th>
+                            <th scope="col"  class="text-dark">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% alluser.forEach(user => { %>
+                         <tr>
+                            <th scope="row" class="text-dark"><%= user.username %></th>
+                            <td class="text-dark"><%= user.email %></td>
+                            <td class="text-dark"><%= user.phone %></td>
+                            <td>
+                                <!-- Edit User Button -->
+                                <a href="/edituser/<%= user._id %>" class="btn btn-primary">Edit</a>
+                            </td>
+                            <td>
+                                   <!-- Block/Unblock Buttons -->
+                                   <% if (user.isBlocked) { %>
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#unblockModal<%= user._id %>">Unblock</button>
+                                <% } else { %>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#blockModal<%= user._id %>">Block</button>
+                                <% } %>
+                            </td>
 
 
 
+                         </tr>
+                         <!-- Unblock Modal -->
+                           <div class="modal fade" id="unblockModal<%= user._id %>" tabindex="-1" role="dialog" aria-labelledby="unblockModalLabel<%= user._id %>" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="unblockModalLabel<%= user._id %>">Unblock User</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you want Unblock</p>
+                                      </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <a href="/unblock/<%= user._id %>" class="btn btn-success">Unblock</a>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          <!-- Block Modal -->
+                           <div class="modal fade" id="blockModal<%= user._id %>" tabindex="-1" role="dialog" aria-labelledby="blockModalLabel<%= user._id %>" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="blockModalLabel<%= user._id %>">Block User</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                       <p>Are you want to Block</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <a href="/block/<%= user._id %>" class="btn btn-danger">Block</a>
 
 
+                        <% }) %>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Content End -->
 
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
 
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/lib/chart/chart.min.js"></script>
+    <script src="/admin/lib/easing/easing.min.js"></script>
+    <script src="/admin/lib/waypoints/waypoints.min.js"></script>
+    <script src="/admin/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/admin/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
+    <!-- Template Javascript -->
+    <script src="/admin/js/main.js"></script>
 </body>
+
 </html>
-
-
-
-
-

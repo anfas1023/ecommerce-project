@@ -12,119 +12,68 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+
+     <!-- Bootstrap-Core-CSS -->
+  <link rel="stylesheet" href="/css/style.css" type="text/css" media="all" >
+  <!-- Style-CSS -->
+  <!-- font-awesome-icons -->
+  <link href="/css/font-awesome.css" rel="stylesheet">
+  <!-- //font-awesome-icons -->
+  <!-- /Fonts -->
+  <link href="//fonts.googleapis.com/css?family=Hind:300,400,500,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- //Fonts -->
 </head>
 <body>
       <!--Main Navigation-->
-<header>
-    <!-- Jumbotron -->
-    <div class="p-3 text-center bg-white border-bottom">
-      <div class="container">
-        <div class="row gy-3">
-          <!-- Left elements -->
-          <div class="col-lg-2 col-sm-4 col-4">
-            <a href="https://mdbootstrap.com/" target="_blank" class="float-start">
-              <img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="35" alt="" >
-            </a>
-          </div>
-          <!-- Left elements -->
-  
-          <!-- Center elements -->
-          <div class="order-lg-last col-lg-5 col-sm-8 col-8">
-            <div class="d-flex float-end">
-              <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" > <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Sign in</p> </a>
-              <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" > <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
-              <a href="/cart" class="border rounded py-1 px-3 nav-link d-flex align-items-center"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">My cart</p> </a>
-              <a href="/products" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" > <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Products</p> </a>
-              <a href="/userprofile" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" > <i class="fas fa-user-alt m-1 me-md-2"></i><p class="d-none d-md-block mb-0">User profile</p> </a>
-            </div>
-          </div>
-          <!-- Center elements -->
+      <div class="main-sec inner-page">
+        <!-- //header -->
+        <header class="py-sm-3 pt-3 pb-2" id="home">
+            <div class="container">
+                <!-- nav -->
+                <div class="top-w3pvt d-flex">
+                    <div id="logo">
+                        <h1> <a href="index.html"><span class="log-w3pvt">B</span>cart</a> <label class="sub-des">Online Store</label></h1>
+                    </div>
 
-          <!-- Right elements -->
-          <div class="col-lg-5 col-md-12 col-12">
-            <div class="input-group float-center">
-              <div class="form-outline">
-                <input type="search" id="form1" class="form-control" />
-                <label class="form-label" for="form1">Search</label>
-              </div>
-              <button type="button" class="btn btn-primary shadow-0">
-                <i class="fas fa-search"></i>
-              </button>
+                    <div class="forms ml-auto">
+                        <a href="/login" class="btn"><span class="fa fa-user-circle-o"></span> Sign In</a>
+                        <a href="/signup" class="btn"><span ><i class="fa-solid fa-user-plus"></i></span> Sign Up</a>
+                    </div>
+                </div>
+                <div class="nav-top-wthree">
+                    <nav>
+                        <label for="drop" class="toggle"><span class="fa fa-bars"></span></label>
+                        <input type="checkbox" id="drop" >
+                        <ul class="menu">
+                            <li><a href="/home">Home</a></li>
+                            <li><a href="about.html">About Us</a></li>
+                            <li >
+                                <!-- First Tier Drop Down -->
+                                <a href="/cart">Cart</a>
+
+                            </li>
+
+                            <li ><a href="/products">Collections</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <!-- //nav -->
+                    <div class="search-form ml-auto">
+                        <div class="form-w3layouts-grid">
+                            <form action="#" method="post" class="newsletter">
+                                <input class="search" type="search" placeholder="Search here..." required="">
+                                <button class="form-control btn" value=""><span class="fa fa-search"></span></button>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
             </div>
-          </div>
-          <!-- Right elements -->
-        </div>
-      </div>
+        </header>
+        <!-- //header -->
     </div>
-    <!-- Jumbotron -->
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-      <!-- Container wrapper -->
-      <div class="container justify-content-center justify-content-md-between">
-        <!-- Toggle button -->
-        <button
-                class="navbar-toggler border py-2 text-dark"
-                type="button"
-                data-mdb-toggle="collapse"
-                data-mdb-target="#navbarLeftAlignExample"
-                aria-controls="navbarLeftAlignExample"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-                >
-          <i class="fas fa-bars"></i>
-        </button>
-
-        <!-- Collapsible wrapper -->
-        <div class="collapse navbar-collapse" id="navbarLeftAlignExample">
-          <!-- Left links -->
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link text-dark" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Categories</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Hot offers</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Gift boxes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Projects</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Menu item</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="#">Menu name</a>
-            </li>
-            <!-- Navbar dropdown -->
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                Others
-              </a>
-              <!-- Dropdown menu -->
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <a class="dropdown-item" href="#">Action</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">Another action</a>
-                </li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-          <!-- Left links -->
-        </div>
-      </div>
-      <!-- Container wrapper -->
-    </nav>
     <% orders.forEach(product => { %>
 
         <div class="container">
@@ -135,7 +84,7 @@
                     <article class="card">
                         <div class="card-body row">
                             <div class="col"> <strong>Estimated Delivery time:</strong> <br>29 nov 2019 </div>
-                            <div class="col"> <strong>Shipping BY:</strong> <br> BLUEDART, | <i class="fa fa-phone"></i> +1598675986 </div>
+                            <div class="col"> <strong>Shipping BY:</strong> <br>Bcart, | <i class="fa fa-phone"></i> +1598675986 </div>
                             <div class="col"> <strong>Status:</strong> <br> <%= product.status  %> </div>
                             <div class="col"> <strong>OrdeID #:<%= product._id  %></strong> <br>  </div>
                         </div>
@@ -155,9 +104,13 @@
                     <ul class="row">
                         <li class="col-md-4">
                             <figure class="itemside mb-3">
-                                <div class="aside"><img src="/uploads/<%= products. imageUrl %>" class="img-sm border"></div>
+                               <div class="aside"><img src="/uploads/<%=  products.productId.productimage[0].filename %>" class="img-sm border" alt="">
+
+                                </div>
+
+
                                 <figcaption class="info align-self-center">
-                                    <p class="title"><%= products.productName %> <br> <%= products.quantity %></p> <span class="text-muted"><%= product. totalPrice %> </span>
+                                    <p class="title"><%= products.productId.productname %> <br></p> <span class="text-muted"><%= product.totalPrice %> </span>
                                 </figcaption>
                             </figure>
                         </li>
@@ -165,11 +118,23 @@
                     <% }) %>
 
                     <hr>
-                    <a href="#" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
+                    <a href="/products" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
                 </div>
+                <div>
+                  <form action="/cancelorder/<%= product._id %>" id="form" method="post">
+
+                    <button id="button" type="submit" class="btn btn-danger">Cancel Order</button>
+
+                  </form>
+
+
+                </div>
+
+                <% }) %>
             </article>
         </div>
-    <% }) %>
+
+
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -177,5 +142,14 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <!-- <script>
+        document.getElementById('form').addEventListener("submit",()=>{
+            const button=document.getElementById('button');
+            button.style.display = 'none';
+
+        })
+    </script> -->
+
+
 </body>
 </html>

@@ -1,4 +1,11 @@
 const mongoose = require('mongoose');
+const orderProducts= new mongoose.Schema({
+    productId: {
+      type: mongoose.Schema.Types.ObjectId, // Assuming each cart item is associated with a product
+      ref: 'Product', // Reference to the Product model
+      required: true,
+    }
+  });
 
 const orderSchema = new mongoose.Schema({
     user: {
@@ -15,26 +22,7 @@ const orderSchema = new mongoose.Schema({
         default: Date.now,
         required: true,
     },
-    products: [
-        {
-            productName: {
-                type: String,
-                required: true,
-            },
-            quantity: {
-                type: Number,
-                required: true,
-            },
-            price: {
-                type: Number,
-                required: true,
-            },
-            imageUrl:[{
-                type: String,
-                required: true,
-              }],
-        },
-    ],
+    products: [orderProducts],
     totalPrice: {
         type: Number,
         required: true,
