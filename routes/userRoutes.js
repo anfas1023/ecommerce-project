@@ -43,6 +43,7 @@ const { loginuser,
     downloadInvoice,
     sortProductByPrice,
     logout,
+    walletHistory,
 }=require('../controllers/userController');
 
 require('../middlewares/GoogleAuth')(passport)
@@ -141,7 +142,11 @@ router.post('/sort',sortProductByPrice);
 
 // logout
 
-router.get('/logout',logout)
+router.get('/logout',logout);
+
+// wallet history
+
+router.get('/wallethistory',walletHistory)
 
 
 

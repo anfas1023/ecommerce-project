@@ -62,7 +62,7 @@ const loginuserpost=async(req,res)=>{
         }
 
 
-        if(await bcrypt.compare(req.body.password,check.password) && check.isBlocked===false && req.body.email===check.email){
+        if(await bcrypt.compare(req.body.password,check.password) && check.isBlocked===false && req.body.email===check.email && check.isVerified===true ){
             req.session.userId = check._id;
             console.log(check._id,req.session.userId)
 
@@ -283,6 +283,8 @@ const otppost = async (req, res) => {
 
         if (user.otp == req.body.otp) {
             console.log("okkk");
+            user.isVerified=true;
+            user.save();
             res.redirect('/login');
         } else {
             // Incorrect OTP
@@ -575,27 +577,27 @@ const decrementquantity=async(req,res)=>{
 
 }
 // product page
-
 const productlist = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 6;
         const skip = (page - 1) * limit;
 
-      const allproduct = await Product.find();
-      const totalCount = allproduct.length;
-      const totalPages = Math.ceil(totalCount / limit);
+        const allproduct = await Product.find();
+        const totalCount = allproduct.length;
+        const totalPages = Math.ceil(totalCount / limit);
 
-      const paginatedProducts = await Product.find()
-        .skip(skip)
-        .limit(limit);
+        const paginatedProducts = await Product.find()
+            .skip(skip)
+            .limit(limit);
 
-      res.render('productlistgrid', { allproduct: paginatedProducts, totalPages: totalPages });
+        res.render('productlistgrid', { allproduct: paginatedProducts, totalPages: totalPages, currentPage: page });
     } catch (error) {
-      console.log(error);
-      res.status(500).send('Internal Server Error');
+        console.log(error);
+        res.status(500).send('Internal Server Error');
     }
 };
+
 
 // product filiter By ccatagory
 
@@ -625,7 +627,8 @@ const catagoryLaptop=async(req,res)=>{
     
         const totalCount = paginatedProducts.length;
         const totalPages = Math.ceil(totalCount / limit);
-        res.render('productlistgrid', { allproduct:paginatedProducts, totalPages:totalPages });
+        const currentPage=1
+        res.render('productlistgrid', { allproduct:paginatedProducts, totalPages:totalPages,currentPage });
     
     }catch(error){
         console.log(error)
@@ -662,7 +665,8 @@ const catagoryPrinters=async(req,res)=>{
       
         const totalCount = paginatedProducts.length;
         const totalPages = Math.ceil(totalCount / limit);
-        res.render('productlistgrid', { allproduct:paginatedProducts, totalPages:totalPages });
+        const currentPage=1
+        res.render('productlistgrid', { allproduct:paginatedProducts, totalPages:totalPages,currentPage });
     }catch(error){
 console.log(error)
     }
@@ -689,8 +693,9 @@ const filiterPrice = async (req, res) => {
                 console.log("productByPrice", productByPrice);
 
                 const totalPages = 1;
+                const currentPage=1
 
-                res.render("productlistgrid", { allproduct: productByPrice, totalPages: totalPages });
+                res.render("productlistgrid", { allproduct: productByPrice, totalPages: totalPages,currentPage });
             } else {
                 res.json({ error: "Internal server error" });
             }
@@ -711,7 +716,9 @@ const searchOutProduct=async(req,res)=>{
         const searchedProduct=await Product.find({productname: {$regex:pattern,$options:'i'}});
         console.log("searchedProduct",searchedProduct)
         const totalPages=1
-        res.render("productlistgrid", { allproduct: searchedProduct, totalPages: totalPages });
+        const currentPage=1
+        res.render("productlistgrid", { allproduct: searchedProduct, totalPages: totalPages,currentPage });
+        
 
     }catch(error){
       console.log(error)
@@ -737,7 +744,9 @@ const sortProductByPrice = async (req, res) => {
             ]);
     
             const totalPages=1
-      return  res.render("productlistgrid", { allproduct: sortedProducts, totalPages: totalPages });
+            const currentPage=1
+            
+      return  res.render("productlistgrid", { allproduct: sortedProducts, totalPages: totalPages,currentPage });
         }else{
             const sortedProducts = await Product.aggregate([
                 {
@@ -748,7 +757,8 @@ const sortProductByPrice = async (req, res) => {
             ]);
     
             const totalPages=1
-      return  res.render("productlistgrid", { allproduct: sortedProducts, totalPages: totalPages });
+            const currentPage=1
+      return  res.render("productlistgrid", { allproduct: sortedProducts, totalPages: totalPages,currentPage });
         }
     } catch (error) {
         console.error('Error sorting products by price:', error);
@@ -945,7 +955,9 @@ const checkOutPageGet=async(req,res)=>{
         if (product.cartitems.length === 0) {
           return  res.redirect('/cart');
         }
-       return res.render('checkoutpage',{address:user.address,userproduct:product.cartitems,product:product});
+        const coupon=await Coupon.find()
+        // console.log("coupon",coupon)
+       return res.render('checkoutpage',{address:user.address,userproduct:product.cartitems,product:product,coupon});
 
     }else{
        return res.redirect('/login');
@@ -1414,8 +1426,7 @@ const referralCode=async(req,res)=>{
    }else{
     console.log("no existss")
    }
-   
-    
+      
 }
 
 
@@ -1507,6 +1518,22 @@ const logout=(req,res)=>{
 
 
 
+const walletHistory=async(req,res)=>{
+    try{
+        const userId=req.session.userId
+        console.log(userId)
+        const walletHistory=await Wallet.findOne({userId:userId})
+        console.log("walletHistory",walletHistory)
+
+        res.render('wallethistory',{walletHistory})
+    }catch(error){
+
+    }
+
+}
+
+
+
 
 
 
@@ -1568,4 +1595,5 @@ module.exports={
     downloadInvoice,
     sortProductByPrice,
     logout,
+    walletHistory,
 }

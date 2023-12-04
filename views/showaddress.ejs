@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Addresses</title>
+    <title>GadgetHub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
@@ -240,7 +240,7 @@
             <div class="container">
                 <div class="top-w3pvt d-flex">
                     <div id="logo">
-                        <h1> <a href="index.html"><span class="log-w3pvt">B</span>cart</a> <label
+                        <h1> <a href="index.html"><span class="log-w3pvt">G</span>adgetHub</a> <label
                                 class="sub-des">Online Store</label></h1>
                     </div>
                     <div class="forms ml-auto">
@@ -328,7 +328,34 @@
                         <div class="p-3">
                             <a class="btn btn-secondary" href="/editAddress/<%= address[i]._id %>">Edit Address</a>
                             <form action="/deleteaddress/<%= address[i]._id %>" method="post">
-                                <button type="submit" class="btn btn-danger">Delete Address</button>
+                                <!-- Add data-bs-toggle and data-bs-target attributes to the delete button -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal<%= address[i]._id %>">
+    Delete Address
+  </button>
+
+      <!-- Modal for confirmation -->
+<div class="modal fade" id="confirmDeleteModal<%= address[i]._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirm Deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this address?
+        </div>
+        <div class="modal-footer">
+          <!-- Use a submit button instead of a regular button -->
+          <form action="/deleteaddress/<%= address[i]._id %>" method="post">
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+          </form>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal ends here -->
+  
                             </form>
                         </div>
                     </div>
@@ -337,6 +364,9 @@
             </div>
         </div>
     </div>
+
+
+  
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
