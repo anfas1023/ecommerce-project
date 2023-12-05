@@ -57,7 +57,7 @@ const admindashboard = async (req, res) => {
       },
     ]);
 
-    console.log("orderperday",ordersPerDay);
+    // console.log("orderperday",ordersPerDay);
     const labels = lastSevenDays;
     let data=[]
     // console.log('labelsteh',labels);
@@ -104,17 +104,20 @@ const admindashboard = async (req, res) => {
      ])
 
 
-// console.log("orderPerMounth",orderPerMounth)
-const mountdata=[]
-orderPerMounth.forEach((order)=>{
- const mounth=monthsOfCurrentYear.filter((mounth)=>{
-  if(mounth===order._id){
-    mountdata.push(order.count)
-  }else{
-    mountdata.push(0)
+console.log("orderPerMounth",orderPerMounth)
+const mountdata = [];
+
+monthsOfCurrentYear.forEach((month) => {
+  const orderForMonth = orderPerMounth.find((order) => order._id === month);
+
+  if (orderForMonth) {
+    mountdata.push(orderForMonth.count);
+  } else {
+    mountdata.push(0);
   }
-})
-})
+});
+
+console.log("mounthdata",mountdata)
 
 
 // console.log("mountdata",mountdata,monthsOfCurrentYear);
@@ -135,27 +138,31 @@ for (let year = startYear; year <= currentYear; year++) {
 // console.log('Current Year:', CurrentYear);
 // console.log('All Years:', allYears);
 
-
-const orderPerYear=await Order.aggregate([
+const orderPerYear = await Order.aggregate([
   {
-    $group:{
-      _id: { $dateToString: { format: "%Y", date: "$orderDate"} },
-      count:{$sum:1}
+    $group: {
+      _id: { $dateToString: { format: "%Y", date: "$orderDate" } },
+      count: { $sum: 1 }
     }
   }
-
 ]);
 
-const orderData=[];
-orderPerYear.forEach((order)=>{
-  const year=allYears.filter((year)=>{
-    if(year===parseInt(order._id)){
-      orderData.push(order.count)
-    }else{
-      orderData.push(0)
-    }
-  })
+console.log("orderPerYear", orderPerYear);
+
+const orderData = [];
+
+allYears.forEach((year) => {
+  const orderForYear = orderPerYear.find((order) => order._id === year.toString());
+
+  if (orderForYear) {
+    orderData.push(orderForYear.count);
+  } else {
+    orderData.push(0);
+  }
 });
+
+console.log("orderData", orderData);
+
 
 const totalOrder = await Order.aggregate([
   {
@@ -187,7 +194,7 @@ const totaluser =totalUser .map((user)=>user.totalUser)
 // console.log("totalorder",totalOrder,totalorder,totalrevenue);
 
 const errorMessage = req.flash('error');
-console.log("errorMessage",errorMessage);
+// console.log("errorMessage",errorMessage);
 
 // catagory wise sales
 
@@ -218,7 +225,7 @@ catagory.forEach((c)=>{
   catagoryCount.push(c.count)
 })
 
-console.log("catagory",catagory,catagoryType,catagoryCount);
+// console.log("catagory",catagory,catagoryType,catagoryCount);
 
 
 
