@@ -266,7 +266,7 @@ const salesReport = async (req, res) => {
           as: "userData"
         } 
       },
-      {
+      { 
         $unwind: "$productData",
       },
       {$project:
