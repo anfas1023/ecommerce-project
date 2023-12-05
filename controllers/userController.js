@@ -702,12 +702,12 @@ const filiterPrice = async (req, res) => {
 
         }else{
             res.redirect('/login')
-        } 
+        }
 
     } catch (error) {
         console.error("Error:", error);
         res.json({ error: "Internal server error" });
-    } 
+    }
 };
 
 const searchOutProduct=async(req,res)=>{
@@ -1118,73 +1118,14 @@ const orderManagnmentPost = async (req, res) => {
 
 const orderManagnmentRazor = async (req, res) => {
     if (req.session.userId) {
-        const userId = req.session.userId;
-        const addressId = req.params.addressId;
-        try {
-            const user = await User.findById(userId)
-                .populate('address')
-                .populate({
-                    path: 'cartitems.productId',
-                    model: 'Product'
-                });
-            if (!user) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-
-            const address = user.address.id(addressId);
-            if (!address) {
-                return res.status(404).json({ error: 'Address not found' });
-            }
-
-
+       
+        try {       
             const totalPrice = req.body.couponValueApply;
-
-            const orderProducts = user.cartitems.map((cartItem) => ({
-                productId: cartItem.productId._id
-            }));
-
-            const quantity = user.cartitems.map((cart) => {
-                return cart.quantity
-              });
-
-            // Move this line after totalPrice is defined
-            const orderData = {
-                user: userId,
-                customerName: user.username,
-                products: orderProducts,  // Make sure orderProducts is defined
-                totalPrice: totalPrice,
-                shippingAddress: {
-                    street: address.street,
-                    city: address.city,
-                    state: address.state,
-                    pincode: address.pincode,
-                    country: address.country,
-                },
-                quantity:parseInt(quantity),
-                status: 'Pending',
-            };
-
-
-
-            const order = await Order.create(orderData);
-
-            const productId = user.cartitems.map((user) => {
-                return user.productId._id;
-            });
-
-
-            const cartDelete = await User.findByIdAndUpdate(userId,
-                {
-                    $pull: { 'cartitems': { 'productId': { $in: productId } } }
-                },
-                { new: true }
-
-            );
 
             const options = {
                 amount: totalPrice * 100, // Razorpay expects amount in paisa
                 currency: 'INR',
-                receipt: order._id.toString(),
+                receipt: 'order_rcptid_11',
                 payment_capture: 1, // Automatically capture the payment when it's successful
             };
 

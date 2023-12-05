@@ -93,7 +93,7 @@
             <!-- nav -->
             <div class="top-w3pvt d-flex">
                 <div id="logo">
-                    <h1> <a href="index.html"><span class="log-w3pvt">G</span>adgetHub</a> <label class="sub-des">Online Store</label></h1>
+                    <h1> <a href=/home><span class="log-w3pvt">G</span>adgetHub</a> <label class="sub-des">Online Store</label></h1>
                 </div>
 
                 <div class="forms ml-auto">
@@ -107,7 +107,7 @@
                     <input type="checkbox" id="drop" >
                     <ul class="menu">
                         <li><a href="/home">Home</a></li>
-                        <li><a href="about.html">About Us</a></li>
+
                         <li >
                             <!-- First Tier Drop Down -->
                             <a href="/cart">Cart</a>
@@ -115,7 +115,7 @@
                         </li>
 
                         <li><a href="/products">Collections</a></li>
-                        <li><a href="contact.html">Contact</a></li>
+                       
                     </ul>
                 </nav>
                 <!-- //nav -->
@@ -464,8 +464,26 @@ document.getElementById('button').addEventListener('click', (event) => {
                 handler: function (response) {
                     // Handle success, you can send the payment ID to the server
                     console.log('Payment successful!', response);
-                    alert("payment sucessfull")
-                    window.location.href = '/ordersucessfull';
+                    const addressId = document.querySelector('input[name="flexRadioDefault"]:checked').getAttribute('data-address-id');
+                    const couponValueApply=document.getElementById('totalPrice').textContent
+                    fetch(`/addorder/${addressId}`,{
+                      method:'post',
+                      headers: {
+                          'Content-Type': 'application/json' 
+                        },
+                        body: JSON.stringify({couponValueApply})
+                    }).then((res)=>{
+                      if(res.ok){
+                        console.log("res",res)
+                        alert("payment sucessfull");
+                        window.location.href = '/ordersucessfull';
+                      }else{
+                        alert("payment Has been cancelled")
+                      }
+                    })
+                    
+    
+                    
                 },
                 prefill: {
                     name: 'Anfas Muhammed',
