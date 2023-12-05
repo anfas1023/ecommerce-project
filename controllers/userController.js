@@ -707,7 +707,7 @@ const filiterPrice = async (req, res) => {
     } catch (error) {
         console.error("Error:", error);
         res.json({ error: "Internal server error" });
-    }
+    } 
 };
 
 const searchOutProduct=async(req,res)=>{
