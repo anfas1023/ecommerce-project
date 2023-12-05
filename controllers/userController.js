@@ -62,11 +62,16 @@ const loginuserpost=async(req,res)=>{
         }
 
 
-        if(await bcrypt.compare(req.body.password,check.password) && check.isBlocked===false && req.body.email===check.email && check.isVerified===true ){
-            req.session.userId = check._id;
-            console.log(check._id,req.session.userId)
-
-          return  res.redirect('/home');
+        if(await bcrypt.compare(req.body.password,check.password) && check.isBlocked===false && req.body.email===check.email ){
+            if(check.isVerified===true ){
+                req.session.userId = check._id;
+                console.log(check._id,req.session.userId)
+              return  res.redirect('/home');
+            }else{
+                const findUser=await User.findByIdAndRemove(check._id)
+                return  res.render('login',{message:"user is not verified"});
+            }
+    
 
         }else{
           return  res.render('login',{message:"not valid email and password"});
