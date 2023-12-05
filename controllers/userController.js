@@ -702,7 +702,7 @@ const filiterPrice = async (req, res) => {
 
         }else{
             res.redirect('/login')
-        }
+        } 
 
     } catch (error) {
         console.error("Error:", error);
