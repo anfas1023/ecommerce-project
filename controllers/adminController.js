@@ -264,7 +264,7 @@ const salesReport = async (req, res) => {
           localField: "user",
           foreignField: "_id",
           as: "userData"
-        }
+        } 
       },
       {
         $unwind: "$productData",
