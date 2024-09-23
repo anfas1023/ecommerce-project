@@ -18,7 +18,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './views'));
 
 
-const port=5000
+const port=5001
 
 // middleware set ups
 
@@ -42,8 +42,6 @@ const nocache = (req,res,next)=> {
 app.use(nocache);
 app.use(errorhandllers);
 app.use(flash());
-
-
 
 app.use('/',userRoutes);
 app.use('/',adminRoutes);

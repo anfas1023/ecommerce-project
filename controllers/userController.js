@@ -26,10 +26,10 @@ const transporter=nodemailer.createTransport({
 const Wallet=require('../model/walletManagement')
 
 const Razorpay = require('razorpay');
-const razorpay = new Razorpay({
-    key_id: process.env.RAZOR_PAY_ID,
-    key_secret:  process.env.RAZOR_KEY_SECRET,
-});
+// const razorpay = new Razorpay({
+//     key_id: process.env.RAZOR_PAY_ID,
+//     key_secret:  process.env.RAZOR_KEY_SECRET,
+// });
 
 const loginuser=(req,res)=>{
     if(req.session.userId){
@@ -98,7 +98,12 @@ const signup=(req,res)=>{
 
     const check=await User.findOne({email:req.body.email});
 
+    console.log("req.body.email",req.body.email);
+    
+
     if(check){
+        console.log("exist");
+        
       return  res.render('signup',{message:"Email address already there"});
     }
 
@@ -908,10 +913,8 @@ const addAddressPost=async(req,res)=>{
     try{
     if(req.session.userId){
         const userId= req.session.userId;
-        console.log("req.body",req.body);
        const userAddress={
         street:req.body.street,
-
         city:req.body.city,
         state: req.body.state,
         pincode:req.body.pincode,
