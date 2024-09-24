@@ -104,7 +104,7 @@ const admindashboard = async (req, res) => {
      ])
 
 
-console.log("orderPerMounth",orderPerMounth)
+// console.log("orderPerMounth",orderPerMounth)
 const mountdata = [];
 
 monthsOfCurrentYear.forEach((month) => {
@@ -117,7 +117,7 @@ monthsOfCurrentYear.forEach((month) => {
   }
 });
 
-console.log("mounthdata",mountdata)
+// console.log("mounthdata",mountdata)
 
 
 // console.log("mountdata",mountdata,monthsOfCurrentYear);
@@ -147,7 +147,7 @@ const orderPerYear = await Order.aggregate([
   }
 ]);
 
-console.log("orderPerYear", orderPerYear);
+// console.log("orderPerYear", orderPerYear);
 
 const orderData = [];
 
@@ -161,7 +161,7 @@ allYears.forEach((year) => {
   }
 });
 
-console.log("orderData", orderData);
+// console.log("orderData", orderData);
 
 
 const totalOrder = await Order.aggregate([
@@ -247,7 +247,7 @@ const salesReport = async (req, res) => {
     const endDate = new Date(req.query.endDate);
     // endDate.setHours(23, 59, 59, 999);
     endDate.setDate(endDate.getDate() + 1);
-    console.log("start date",startDate,endDate);
+    // console.log("start date",startDate,endDate);
 
     const order = await Order.aggregate([
 
@@ -432,7 +432,7 @@ const edituserpost = async (req, res) => {
       password: req.body.password,
       phone: req.body.phone,
     };
-    console.log("Updated Data:", updateddata);
+    // console.log("Updated Data:", updateddata);
 
     const updateindatabase = await User.findOneAndUpdate(
       { _id: id },
@@ -443,7 +443,7 @@ const edituserpost = async (req, res) => {
       console.error("User not found or not updated.");
     }
 
-    console.log("Updated User:", updateindatabase);
+    // console.log("Updated User:", updateindatabase);
     res.redirect("/usermanagment");
   } catch (error) {
     console.error("Error:", error);
@@ -532,7 +532,7 @@ const editproductpost = async (req, res) => {
   try {
     const id = req.params.id;
     console.log(id);
-    console.log("req.files", req.files);
+    // console.log("req.files", req.files);
 
     // if there is no images while uploadig
     if (req.files.length === 0) {
@@ -603,7 +603,7 @@ const categorymanagmentget = async (req, res) => {
 const addcatagory = async (req, res) => {
   const catagory = new RegExp(req.body.catagoryname, "i");
   const catagoryname = await Catagory.findOne({ catagoryname: catagory });
-  console.log("catagoryname", catagoryname);
+  // console.log("catagoryname", catagoryname);
   if (catagoryname) {
     return res.status(400).json("catagory name already exit");
   }
@@ -614,10 +614,10 @@ const addcatagory = async (req, res) => {
     catagoryname: req.body.catagoryname,
     catagorydescription: req.body.catagorydescription,
   };
-  console.log("new data");
-  console.log("newcatagory", newcatagory);
+  // console.log("new data");
+  // console.log("newcatagory", newcatagory);
   const catagorydata = await Catagory.insertMany([newcatagory]);
-  console.log(catagorydata);
+  // console.log(catagorydata);
   return res.redirect("/catagorymanagment");
 };
 //     edit catagory
@@ -625,11 +625,11 @@ const editcatagory = async (req, res) => {
   try {
     // const id = req.params.id;
     const id = req.body.catagoryid;
-    console.log("id", id);
+    // console.log("id", id);
 
     const catagory = new RegExp(req.body.catagoryname, "i");
     const catagoryname = await Catagory.findOne({ catagoryname: catagory });
-    console.log("catagoryname", catagoryname);
+    // console.log("catagoryname", catagoryname);
     if (catagoryname) {
       return res.status(400).json("catagory name already exit");
     }
@@ -638,7 +638,7 @@ const editcatagory = async (req, res) => {
       catagoryname: req.body.catagoryname,
       catagorydescription: req.body.catagorydescription,
     };
-    console.log("updated catagory", updatedcatagory);
+    // console.log("updated catagory", updatedcatagory);
 
     if (!updatedcatagory) {
       throw new Error("category not found or cannot be updated");
@@ -674,15 +674,15 @@ const orderManagnment = async (req, res) => {
 const statusUpdate = async (req, res) => {
   const orderId = req.params.orderid;
   const selectedStatus = req.params.selectedStatus;
-  console.log("req.params.selectedStatus", selectedStatus);
-  console.log("orderId", orderId);
+  // console.log("req.params.selectedStatus", selectedStatus);
+  // console.log("orderId", orderId);
   const order = await Order.findByIdAndUpdate(
     orderId,
     { status: selectedStatus },
     { new: true }
   );
 
-  console.log("order", order);
+  // console.log("order", order);
   res.redirect("/orderManagnment");
 };
 
@@ -742,7 +742,7 @@ const couponToBlock = async (req, res) => {
       res.status(400);
       throw new Error("Coupon cannot to block");
     }
-    console.log("block", block);
+    // console.log("block", block);
    return  res.redirect('/couponManagment');
   } catch (error) {
     console.log(error);
@@ -754,7 +754,7 @@ const couponToUnblock = async (req, res) => {
     const id = req.params.id;
     console.log(id)
     const unBlock = await Coupon.findByIdAndUpdate(id, {$set:{isBlocked:false}});
-    console.log(unBlock)
+    // console.log(unBlock)
     if (!unBlock) {
       res.status(400);
       throw new Error("Coupon cannot been Unblock");

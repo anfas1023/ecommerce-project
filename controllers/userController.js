@@ -26,10 +26,10 @@ const transporter=nodemailer.createTransport({
 const Wallet=require('../model/walletManagement')
 
 const Razorpay = require('razorpay');
-// const razorpay = new Razorpay({
-//     key_id: process.env.RAZOR_PAY_ID,
-//     key_secret:  process.env.RAZOR_KEY_SECRET,
-// });
+const razorpay = new Razorpay({
+    key_id: process.env.RAZOR_PAY_ID,
+    key_secret:  process.env.RAZOR_KEY_SECRET,
+});
 
 const loginuser=(req,res)=>{
     if(req.session.userId){
@@ -126,6 +126,25 @@ const signup=(req,res)=>{
     }
     const user=new User(data)
     await user.save()
+    // const transporter = nodemailer.createTransport({
+    //     service: 'smtp.gmail.com',
+    //     auth: {
+    //         user: 'anfasmuhammed936@gmail.com',  // your Gmail address
+    //         pass: 'wojs nugq oonr njle'            // your Gmail app-specific password
+    //     }
+    // });
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com', // Use the correct SMTP host
+        port: 587,              // Port for secure SMTP
+        secure: false,          // Use true for port 465, false for other ports
+        auth: {
+            user: 'anfasmuhammed936@gmail.com', // Your email
+            pass: 'wojs nugq oonr njle',     // Your App Password
+        },
+        tls: {
+            rejectUnauthorized: false, // Disable certificate validation
+        },
+    });
     transporter.sendMail(mailoptions,(error,info)=>{
         if(error){
             console.log(error);
@@ -234,9 +253,13 @@ const signup=(req,res)=>{
 
  const resendotp=async(req,res)=>{
     const otp=otpgenerator.generate(4,{digits:true,upperCaseAlphabets:false,lowerCaseAlphabets:false,specialChars:false});
-    Email=req.session.email
+  const  Email=req.session.email 
+    // console.log("Email",Email);
+    
     const update = await User.findOneAndUpdate({ email: Email },{$set:{otp:otp}},{new:true});
     const user=await User.findOne({email:Email})
+    // console.log("user",user);
+    
     console.log("update",update);
     const mailoptions={
         from:"anfasmuhammed936@gmail.com",
@@ -245,6 +268,19 @@ const signup=(req,res)=>{
         text:"this is a message",
         html: otp,
     }
+
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com', // Use the correct SMTP host
+        port: 587,              // Port for secure SMTP
+        secure: false,          // Use true for port 465, false for other ports
+        auth: {
+            user: 'anfasmuhammed936@gmail.com', // Your email
+            pass: 'wojs nugq oonr njle',     // Your App Password
+        },
+        tls: {
+            rejectUnauthorized: false, // Disable certificate validation
+        },
+    });
 
       transporter.sendMail(mailoptions,(error,info)=>{
         if(error){
@@ -339,7 +375,7 @@ const Cartget=async(req,res)=>{
             return acc + curr * productOffers[index];
         }, 0);
         const realtotalAmount=totalPrice-totalOffer
-        console.log("realtotalAmount cartget",realtotalAmount)
+        // console.log("realtotalAmount cartget",realtotalAmount)
 
         user.totalPrice=realtotalAmount
         
@@ -500,7 +536,7 @@ const incrementquantity = async (req, res) => {
     // console.log("Quantities:", quantities);
     // console.log("Product Offers:", productOffers);
     // console.log("Total Offer:", totalOffer);
-    console.log("realTotalAmount increment",realTotalAmount);
+    // console.log("realTotalAmount increment",realTotalAmount);
     
 
 
@@ -575,7 +611,7 @@ const decrementquantity=async(req,res)=>{
     // console.log("Quantities:", quantities);
     // console.log("Product Offers:", productOffers);
     // console.log("Total Offer:", totalOffer);
-    console.log("realTotalAmount decrement",realTotalAmount);
+    // console.log("realTotalAmount decrement",realTotalAmount);
 
    return res.status(200).json({totalOffer})
 
@@ -689,7 +725,7 @@ const filiterPrice = async (req, res) => {
     try {
         if(req.session.userId){
             const selectedvalue = parseInt(req.body.flexRadioDefault);
-            console.log("req.body",req.body);
+            // console.log("req.body",req.body);
 
             if (selectedvalue) {
                 const ltevalue = selectedvalue + 10000;
@@ -700,7 +736,7 @@ const filiterPrice = async (req, res) => {
                 });
 
 
-                console.log("productByPrice", productByPrice);
+                // console.log("productByPrice", productByPrice);
 
                 const totalPages = 1;
                 const currentPage=1
@@ -724,7 +760,7 @@ const searchOutProduct=async(req,res)=>{
     try{
         const pattern=req.body.search
         const searchedProduct=await Product.find({productname: {$regex:pattern,$options:'i'}});
-        console.log("searchedProduct",searchedProduct)
+        // console.log("searchedProduct",searchedProduct)
         const totalPages=1
         const currentPage=1
         res.render("productlistgrid", { allproduct: searchedProduct, totalPages: totalPages,currentPage });
@@ -1073,9 +1109,9 @@ const orderManagnmentPost = async (req, res) => {
               return cart.quantity
             });
 
-            console.log("quantity",quantity)
+            // console.log("quantity",quantity)
            const totalPrice = req.body.couponValueApply;
-           console.log("totalPrice",totalPrice)
+        //    console.log("totalPrice",totalPrice)
 
 
             const orderData = {
@@ -1180,7 +1216,7 @@ const walletPaymentPost = async (req, res) => {
               return cart.quantity
             });
 
-            console.log("quantity",parseInt(quantity))
+            // console.log("quantity",parseInt(quantity))
            const totalPrice = req.body.couponValueApply;
 
         //    wallet checking
@@ -1189,10 +1225,10 @@ const walletPaymentPost = async (req, res) => {
             return res.status(400).json({ error: 'Wallet not found for the user' });
         }
            walletBalance=wallet.balance
-           console.log("totalPrice",totalPrice,walletBalance,req.session.userId);
+        //    console.log("totalPrice",totalPrice,walletBalance,req.session.userId);
 
            if (parseInt(totalPrice) > parseInt(walletBalance)) {
-            console.log("totalPrice is greater than walletBalance");
+            // console.log("totalPrice is greater than walletBalance");
             return res.status(200).json({message: 'Insufficient wallet balance' });
         }
         wallet.balance -= totalPrice;
